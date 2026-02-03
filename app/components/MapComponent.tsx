@@ -1,25 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-
-// Dynamically import the map to avoid SSR issues
-const MapContainer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-const Marker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
-);
-const Popup = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Popup),
-  { ssr: false }
-);
+import { useState } from "react";
 
 export default function MapComponent({
   hoveredCountry,
@@ -30,150 +11,446 @@ export default function MapComponent({
   setHoveredCountry: (country: string | null) => void;
   handleUaeClick: () => void;
 }) {
-  const [isMounted, setIsMounted] = useState(false);
-  const [L, setL] = useState<any>(null);
+  const [showPopup, setShowPopup] = useState<string | null>(null);
 
-  useEffect(() => {
-    setIsMounted(true);
-    import("leaflet").then((leaflet) => {
-      setL(leaflet.default);
-      // Fix for default marker icons in Next.js
-      delete (leaflet.default.Icon.Default.prototype as any)._getIconUrl;
-      leaflet.default.Icon.Default.mergeOptions({
-        iconRetinaUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-        iconUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-        shadowUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-      });
-    });
-  }, []);
+  // Company links for each country
+  const handleSaudiClick = () => {
+    window.dispatchEvent(new CustomEvent("showHome"));
+  };
 
-  if (!isMounted || !L) {
-    return (
-      <div className="flex h-full w-full items-center justify-center bg-slate-800 rounded-lg">
-        <p className="text-white">Loading map...</p>
-      </div>
-    );
-  }
+  const handleEgyptClick = () => {
+    // Add Egypt company link here when available
+    console.log("Egypt clicked");
+  };
 
-  // Custom icon for Saudi Arabia (Gold)
-  const saudiIcon = L.divIcon({
-    className: "custom-marker",
-    html: `<div style="
-      width: 35px;
-      height: 35px;
-      background-color: #E5B838;
-      border: 3px solid white;
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(229, 184, 56, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    ">
-      <div style="
-        width: 14px;
-        height: 14px;
-        background-color: #1e3a5f;
-        border-radius: 50%;
-      "></div>
-    </div>`,
-    iconSize: [35, 35],
-    iconAnchor: [17.5, 17.5],
-  });
+  // Pin positions - more spread out across the map
+  const positions = {
+    egypt: { x: 15, y: 20 }, // Top-left corner
+    saudi: { x: 50, y: 75 }, // Bottom center
+    uae: { x: 85, y: 25 }, // Top-right corner
+  };
 
-  // Custom icon for UAE (Blue)
-  const uaeIcon = L.divIcon({
-    className: "custom-marker",
-    html: `<div style="
-      width: 35px;
-      height: 35px;
-      background-color: #67A1BF;
-      border: 3px solid white;
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(103, 161, 191, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    ">
-      <div style="
-        width: 14px;
-        height: 14px;
-        background-color: white;
-        border-radius: 50%;
-      "></div>
-    </div>`,
-    iconSize: [35, 35],
-    iconAnchor: [17.5, 17.5],
-  });
+  // Generate smooth curved path between two points
+  const generateCurvedPath = (
+    start: { x: number; y: number },
+    end: { x: number; y: number },
+    curveDirection: number = 1
+  ) => {
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
-  // Coordinates
-  const saudiArabia: [number, number] = [23.8859, 45.0792]; // Riyadh, Saudi Arabia
-  const uae: [number, number] = [24.4539, 54.3773]; // Abu Dhabi, UAE
+    const offset = distance * 0.3 * curveDirection;
+
+    const perpX = -dy / distance;
+    const perpY = dx / distance;
+
+    const control1X = start.x + dx * 0.5 + perpX * offset;
+    const control1Y = start.y + dy * 0.5 + perpY * offset;
+
+    return `M ${start.x} ${start.y} Q ${control1X} ${control1Y} ${end.x} ${end.y}`;
+  };
 
   return (
-    <MapContainer
-      center={[24.2, 49.5]} // Center between Saudi Arabia and UAE
-      zoom={6}
-      style={{ height: "100%", width: "100%", zIndex: 0 }}
-      className="rounded-lg"
-    >
-      {/* Dark theme tile layer to match website colors */}
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-        opacity={0.8}
-      />
-
-      {/* Saudi Arabia Marker */}
-      <Marker
-        position={saudiArabia}
-        icon={saudiIcon}
-        eventHandlers={{
-          mouseover: () => setHoveredCountry("saudi"),
-          mouseout: () => setHoveredCountry(null),
-        }}
+    <div className="relative w-full h-full overflow-visible flex items-center justify-center">
+      {/* SVG for abstract map */}
+      <svg
+        viewBox="0 0 100 100"
+        className="w-full h-full"
+        preserveAspectRatio="xMidYMid meet"
       >
-        <Popup className="custom-popup">
-          <div className="text-center">
-            <h3 className="text-lg font-bold text-[#1e3a5f]">Saudi Arabia</h3>
-            <p className="text-sm text-gray-600">
-              Visit our branch at Riyadh, Kingdom of Saudi Arabia
-            </p>
-          </div>
-        </Popup>
-      </Marker>
+        <defs>
+          {/* Subtle background gradient - static, no animation */}
+          <radialGradient id="earthGradient" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stopColor="#0a1a2a" stopOpacity="0.2" />
+            <stop offset="40%" stopColor="#1e293b" stopOpacity="0.15" />
+            <stop offset="70%" stopColor="#334155" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#475569" stopOpacity="0.05" />
+          </radialGradient>
 
-      {/* UAE Marker */}
-      <Marker
-        position={uae}
-        icon={uaeIcon}
-        eventHandlers={{
-          mouseover: () => setHoveredCountry("uae"),
-          mouseout: () => setHoveredCountry(null),
-          click: handleUaeClick,
-        }}
-      >
-        <Popup className="custom-popup">
-          <div className="text-center">
-            <h3 className="text-lg font-bold text-[#67A1BF]">
-              United Arab Emirates
+          {/* Clip path for circular flags */}
+          <clipPath id="circleClip">
+            <circle cx="0" cy="0" r="5" />
+          </clipPath>
+        </defs>
+
+        {/* Subtle static background */}
+        <rect
+          x="10"
+          y="10"
+          width="80"
+          height="80"
+          rx="12"
+          ry="12"
+          fill="url(#earthGradient)"
+        />
+
+        {/* Cityscape Background - Small Orange/Blue Buildings (Static) */}
+        <g className="cityscape-background" opacity="0.08">
+          {/* Building silhouettes - Left side */}
+          <rect x="15" y="60" width="3" height="15" rx="0.5" fill="#67A1BF" opacity="0.6" />
+          <rect x="20" y="55" width="2.5" height="20" rx="0.5" fill="#E5B838" opacity="0.5" />
+          <rect x="24" y="65" width="2" height="10" rx="0.5" fill="#67A1BF" opacity="0.6" />
+          <rect x="18" y="70" width="2.5" height="5" rx="0.5" fill="#E5B838" opacity="0.5" />
+
+          {/* Building silhouettes - Right side */}
+          <rect x="75" y="50" width="3" height="25" rx="0.5" fill="#67A1BF" opacity="0.6" />
+          <rect x="80" y="55" width="2.5" height="20" rx="0.5" fill="#E5B838" opacity="0.5" />
+          <rect x="84" y="60" width="2" height="15" rx="0.5" fill="#67A1BF" opacity="0.6" />
+          <rect x="78" y="65" width="2.5" height="10" rx="0.5" fill="#E5B838" opacity="0.5" />
+
+          {/* Building silhouettes - Bottom */}
+          <rect x="40" y="75" width="2.5" height="12" rx="0.5" fill="#67A1BF" opacity="0.6" />
+          <rect x="45" y="78" width="2" height="9" rx="0.5" fill="#E5B838" opacity="0.5" />
+          <rect x="50" y="72" width="3" height="15" rx="0.5" fill="#67A1BF" opacity="0.6" />
+          <rect x="55" y="76" width="2.5" height="11" rx="0.5" fill="#E5B838" opacity="0.5" />
+
+          {/* Building silhouettes - Top */}
+          <rect x="30" y="15" width="2" height="12" rx="0.5" fill="#67A1BF" opacity="0.6" />
+          <rect x="35" y="18" width="2.5" height="9" rx="0.5" fill="#E5B838" opacity="0.5" />
+          <rect x="60" y="12" width="3" height="15" rx="0.5" fill="#67A1BF" opacity="0.6" />
+          <rect x="65" y="15" width="2" height="12" rx="0.5" fill="#E5B838" opacity="0.5" />
+
+          {/* Scattered small structures */}
+          <rect x="25" y="45" width="1.5" height="8" rx="0.3" fill="#67A1BF" opacity="0.4" />
+          <rect x="70" y="40" width="1.5" height="8" rx="0.3" fill="#E5B838" opacity="0.4" />
+          <rect x="35" y="50" width="1.5" height="8" rx="0.3" fill="#67A1BF" opacity="0.4" />
+          <rect x="85" y="30" width="1.5" height="8" rx="0.3" fill="#E5B838" opacity="0.4" />
+        </g>
+
+        {/* Curved dotted connection lines */}
+        {/* Egypt to Saudi - curves upward */}
+        <path
+          d={generateCurvedPath(positions.egypt, positions.saudi, 1)}
+          fill="none"
+          stroke="#E5B838"
+          strokeWidth="1.2"
+          strokeDasharray="2, 3"
+          strokeLinecap="round"
+          opacity="0.7"
+          className="connection-curve"
+        />
+
+        {/* Saudi to UAE - curves to the right (outside) */}
+        <path
+          d={generateCurvedPath(positions.saudi, positions.uae, 1)}
+          fill="none"
+          stroke="#E5B838"
+          strokeWidth="1.2"
+          strokeDasharray="2, 3"
+          strokeLinecap="round"
+          opacity="0.7"
+          className="connection-curve"
+        />
+
+        {/* UAE to Egypt - curves upward */}
+        <path
+          d={generateCurvedPath(positions.uae, positions.egypt, 1)}
+          fill="none"
+          stroke="#E5B838"
+          strokeWidth="1.2"
+          strokeDasharray="2, 3"
+          strokeLinecap="round"
+          opacity="0.7"
+          className="connection-curve"
+        />
+
+        {/* Egypt Pin */}
+        <g
+          transform={`translate(${positions.egypt.x}, ${positions.egypt.y})`}
+          onMouseEnter={() => {
+            setHoveredCountry("egypt");
+            setShowPopup("egypt");
+          }}
+          onMouseLeave={() => {
+            setHoveredCountry(null);
+            setShowPopup(null);
+          }}
+          onClick={handleEgyptClick}
+          className="cursor-pointer transition-all duration-300 hover:scale-110"
+        >
+          {/* Pulsing glow circle - Red */}
+          <circle
+            cx="0"
+            cy="0"
+            r="6"
+            fill="#ef4444"
+            opacity="0.3"
+            className="animate-ping"
+            style={{ animationDuration: '2s' }}
+          />
+          {/* Static outer ring - Red accent */}
+          <circle
+            cx="0"
+            cy="0"
+            r="6"
+            fill="none"
+            stroke="#ef4444"
+            strokeWidth="1.5"
+            opacity="0.6"
+          />
+          {/* Inner ring */}
+          <circle
+            cx="0"
+            cy="0"
+            r="5"
+            fill="none"
+            stroke="white"
+            strokeWidth="1"
+          />
+          {/* Flag inside circle */}
+          <foreignObject x="-5" y="-5" width="10" height="10" clipPath="url(#circleClip)">
+            <div className="w-full h-full flex items-center justify-center bg-white rounded-full">
+              <img
+                src="https://flagcdn.com/w80/eg.png"
+                alt="Egypt Flag"
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
+          </foreignObject>
+        </g>
+
+        {/* Saudi Arabia Pin */}
+        <g
+          transform={`translate(${positions.saudi.x}, ${positions.saudi.y})`}
+          onMouseEnter={() => {
+            setHoveredCountry("saudi");
+            setShowPopup("saudi");
+          }}
+          onMouseLeave={() => {
+            setHoveredCountry(null);
+            setShowPopup(null);
+          }}
+          onClick={handleSaudiClick}
+          className="cursor-pointer transition-all duration-300 hover:scale-110"
+        >
+          {/* Pulsing glow circle - Green */}
+          <circle
+            cx="0"
+            cy="0"
+            r="6"
+            fill="#22c55e"
+            opacity="0.3"
+            className="animate-ping"
+            style={{ animationDuration: '2s', animationDelay: '0.3s' }}
+          />
+          {/* Static outer ring - Green accent */}
+          <circle
+            cx="0"
+            cy="0"
+            r="6"
+            fill="none"
+            stroke="#22c55e"
+            strokeWidth="1.5"
+            opacity="0.6"
+          />
+          {/* Inner ring */}
+          <circle
+            cx="0"
+            cy="0"
+            r="5"
+            fill="none"
+            stroke="white"
+            strokeWidth="1"
+          />
+          {/* Flag inside circle */}
+          <foreignObject x="-5" y="-5" width="10" height="10" clipPath="url(#circleClip)">
+            <div className="w-full h-full flex items-center justify-center bg-white rounded-full">
+              <img
+                src="https://flagcdn.com/w80/sa.png"
+                alt="Saudi Arabia Flag"
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
+          </foreignObject>
+        </g>
+
+        {/* UAE Pin */}
+        <g
+          transform={`translate(${positions.uae.x}, ${positions.uae.y})`}
+          onMouseEnter={() => {
+            setHoveredCountry("uae");
+            setShowPopup("uae");
+          }}
+          onMouseLeave={() => {
+            setHoveredCountry(null);
+            setShowPopup(null);
+          }}
+          onClick={handleUaeClick}
+          className="cursor-pointer transition-all duration-300 hover:scale-110"
+        >
+          {/* Pulsing glow circle - Blue */}
+          <circle
+            cx="0"
+            cy="0"
+            r="6"
+            fill="#67A1BF"
+            opacity="0.3"
+            className="animate-ping"
+            style={{ animationDuration: '2s', animationDelay: '0.6s' }}
+          />
+          {/* Static outer ring - Blue accent */}
+          <circle
+            cx="0"
+            cy="0"
+            r="6"
+            fill="none"
+            stroke="#67A1BF"
+            strokeWidth="1.5"
+            opacity="0.6"
+          />
+          {/* Inner ring */}
+          <circle
+            cx="0"
+            cy="0"
+            r="5"
+            fill="none"
+            stroke="white"
+            strokeWidth="1"
+          />
+          {/* Flag inside circle */}
+          <foreignObject x="-5" y="-5" width="10" height="10" clipPath="url(#circleClip)">
+            <div className="w-full h-full flex items-center justify-center bg-white rounded-full overflow-hidden">
+              <img
+                src="https://flagsapi.com/AE/flat/64.png"
+                alt="UAE Flag"
+                className="w-full h-full object-cover rounded-full scale-[1.6]"
+                style={{ objectPosition: 'center' }}
+              />
+            </div>
+          </foreignObject>
+        </g>
+      </svg>
+
+      {/* Popups - Optimized without backdrop-blur */}
+      {showPopup === "egypt" && (
+        <div
+          onMouseEnter={() => {
+            setHoveredCountry("egypt");
+            setShowPopup("egypt");
+          }}
+          onMouseLeave={() => {
+            setHoveredCountry(null);
+            setShowPopup(null);
+          }}
+          className="absolute"
+          style={{
+            left: `${positions.egypt.x}%`,
+            top: `${positions.egypt.y}%`,
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999,
+            pointerEvents: "auto",
+          }}
+        >
+          {/* Extended invisible bridge area */}
+          <div className="absolute w-full" style={{ top: "-5px", left: "0", height: "80px" }} />
+
+          <div className="bg-slate-900 text-white rounded-lg shadow-2xl p-4 min-w-[200px] max-w-[280px] border-2 border-red-500" style={{ marginTop: "60px" }}>
+            <h3 className="text-lg font-bold text-white mb-2">
+              Egypt
             </h3>
-            <p className="text-sm text-gray-600">
-              Visit our branch at Dubai, United Arab Emirates
+            <p className="text-sm text-gray-300 mb-3">
+              Visit our branch at Cairo, Egypt
             </p>
             <button
-              onClick={handleUaeClick}
-              className="mt-2 cursor-pointer rounded-full bg-[#E5B838] px-4 py-2 text-sm font-medium text-slate-900 transition-all duration-300 hover:bg-[#d4a732] hover:scale-105"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleEgyptClick();
+              }}
+              className="w-full cursor-pointer rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-red-800"
             >
               Explore Services
             </button>
           </div>
-        </Popup>
-      </Marker>
-    </MapContainer>
+        </div>
+      )}
+
+      {showPopup === "saudi" && (
+        <div
+          onMouseEnter={() => {
+            setHoveredCountry("saudi");
+            setShowPopup("saudi");
+          }}
+          onMouseLeave={() => {
+            setHoveredCountry(null);
+            setShowPopup(null);
+          }}
+          className="absolute"
+          style={{
+            left: `${positions.saudi.x}%`,
+            top: `${positions.saudi.y}%`,
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999,
+            pointerEvents: "auto",
+          }}
+        >
+          {/* Extended invisible bridge area */}
+          <div className="absolute w-full" style={{ top: "-5px", left: "0", height: "80px" }} />
+
+          <div className="bg-slate-900 text-white rounded-lg shadow-2xl p-4 min-w-[200px] max-w-[280px] border-2 border-green-500" style={{ marginTop: "60px" }}>
+            <h3 className="text-lg font-bold text-white mb-2">
+              Saudi Arabia
+            </h3>
+            <p className="text-sm text-gray-300 mb-3">
+              Visit our branch at Riyadh, Kingdom of Saudi Arabia
+            </p>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSaudiClick();
+              }}
+              className="w-full cursor-pointer rounded-full bg-green-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-green-700"
+            >
+              Explore Services
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showPopup === "uae" && (
+        <div
+          onMouseEnter={() => {
+            setHoveredCountry("uae");
+            setShowPopup("uae");
+          }}
+          onMouseLeave={() => {
+            setHoveredCountry(null);
+            setShowPopup(null);
+          }}
+          className="absolute"
+          style={{
+            left: `${positions.uae.x}%`,
+            top: `${positions.uae.y}%`,
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999,
+            pointerEvents: "auto",
+          }}
+        >
+          {/* Extended invisible bridge area */}
+          <div className="absolute w-full" style={{ top: "-5px", left: "0", height: "80px" }} />
+
+          <div className="bg-slate-900 text-white rounded-lg shadow-2xl p-4 min-w-[200px] max-w-[320px] border-2 border-white" style={{ marginTop: "60px" }}>
+            <h3 className="text-lg font-bold text-white mb-2 whitespace-nowrap">
+              United Arab Emirates
+            </h3>
+            <p className="text-sm text-gray-300 mb-3">
+              Visit our branch at Dubai, United Arab Emirates
+            </p>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleUaeClick();
+              }}
+              className="w-full cursor-pointer rounded-full bg-black px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-700"
+            >
+              Explore Services
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

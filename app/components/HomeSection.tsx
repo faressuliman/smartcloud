@@ -1,0 +1,202 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { ArrowDownRight, ArrowRight } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import HomeFeatureCard from "./HomeFeatureCard";
+import WhySmartCloud from "./WhySmartCloud";
+import SectionHeader from "./SectionHeader";
+import { homeFeatures } from "../data/contentData";
+
+interface HomeSectionProps {
+    isNavigated: boolean;
+}
+
+export default function HomeSection({ isNavigated }: HomeSectionProps) {
+    const [homeCardIndex, setHomeCardIndex] = useState(0);
+    const [featureSlideIndex, setFeatureSlideIndex] = useState(0);
+    const [touchStart, setTouchStart] = useState(0);
+    const [touchEnd, setTouchEnd] = useState(0);
+    const homeCardIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Auto-advance home cards on mobile
+    useEffect(() => {
+        // Clear any existing interval
+        if (homeCardIntervalRef.current) {
+            clearInterval(homeCardIntervalRef.current);
+        }
+        // Set new interval
+        homeCardIntervalRef.current = setInterval(() => {
+            setHomeCardIndex((prev) => (prev + 1) % 6);
+        }, 5000);
+        return () => {
+            if (homeCardIntervalRef.current) {
+                clearInterval(homeCardIntervalRef.current);
+            }
+        };
+    }, []);
+
+    const handleHomeCardChange = (index: number) => {
+        setHomeCardIndex(index);
+        if (homeCardIntervalRef.current) {
+            clearInterval(homeCardIntervalRef.current);
+        }
+        homeCardIntervalRef.current = setInterval(() => {
+            setHomeCardIndex((current) => (current + 1) % 6);
+        }, 5000);
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX);
+    const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+    const handleTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        if (distance > 50) handleHomeCardChange((homeCardIndex + 1) % 6);
+        if (distance < -50) handleHomeCardChange((homeCardIndex - 1 + 6) % 6);
+    };
+
+    return (
+        <div className="mx-auto max-w-6xl w-full">
+            {/* Vertical Stack Glass Container Section */}
+            <motion.div
+                className="mb-8 pb-8 lg:pb-14 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-start gap-4 md:gap-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+                {/* Header: Title and Icon (on Top) */}
+                <div className="flex items-center gap-4 px-2 sm:px-0">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+                        Our Expertise
+                    </h2>
+                    <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                </div>
+
+                {/* Content: Glass Content Card (below) */}
+                <motion.div
+                    className="relative w-full bg-white/40 backdrop-blur-sm border-2 border-slate-200/50 rounded-3xl lg:rounded-4xl shadow-xl shadow-secondary/20 px-6 md:px-10 py-8 md:py-10"
+                >
+                    <p className="text-sm lg:text-base text-slate-600 leading-relaxed text-start">
+                        Smart Cloud is a leading provider of intelligent technology solutions, specializing in smart automation, ELV systems, and marine technical supplies. With years of expertise, we ensure the highest standards of quality and reliability for all your technology needs.
+                    </p>
+                </motion.div>
+            </motion.div>
+
+            {/* Grouped What We Can Do For You Section with Precise Animation Trigger */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ duration: 0.4 }}
+            >
+                {/* Unified What We Can Do For You Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="mb-2 pb-2 border-b border-slate-200/60 px-4 md:px-4 lg:px-0 flex items-center gap-4"
+                >
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+                        What We Can Do For You
+                    </h2>
+                    <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                </motion.div>
+
+                {/* Feature Blocks - Carousel */}
+                <div className="relative md:px-4 lg:px-0">
+                    {/* Controls Header (Desktop/Tablet) */}
+                    <div className="hidden md:flex items-center justify-between mb-8 relative z-10">
+                        <div className="flex gap-1">
+                            <button
+                                onClick={() => setFeatureSlideIndex(0)}
+                                className={`rounded-full transition-all duration-300 ${featureSlideIndex === 0 ? "w-8 h-3 bg-primary" : "w-3 h-3 bg-slate-300 hover:bg-slate-400"}`}
+                                aria-label="Go to slide 1"
+                            />
+                            <button
+                                onClick={() => setFeatureSlideIndex(1)}
+                                className={`rounded-full transition-all duration-300 ${featureSlideIndex === 1 ? "w-8 h-3 bg-primary" : "w-3 h-3 bg-slate-300 hover:bg-slate-400"}`}
+                                aria-label="Go to slide 2"
+                            />
+                        </div>
+
+                        <button
+                            onClick={() => setFeatureSlideIndex((prev) => (prev === 0 ? 1 : 0))}
+                            className="w-12 h-12 bg-primary hover:bg-primary/90 text-white rounded-full flex items-center justify-center transition-colors shadow-lg cursor-pointer"
+                            aria-label="Toggle slide"
+                        >
+                            <ArrowRight className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    {/* Desktop/Tablet: Carousel Layout */}
+                    <div className="hidden md:block overflow-hidden py-4 -my-4">
+                        <motion.div
+                            className="flex"
+                            animate={{ x: featureSlideIndex === 0 ? "0%" : "-50%" }}
+                            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                            style={{ width: "200%" }}
+                        >
+                            <div className="grid grid-cols-3 gap-4 lg:gap-8 w-1/2">
+                                {homeFeatures.slice(0, 3).map((item, index) => (
+                                    <HomeFeatureCard
+                                        key={index}
+                                        imageSrc={item.src}
+                                        imageAlt={item.alt}
+                                        title={item.title}
+                                        description={item.desc}
+                                        animationDelay={index * 0.1}
+                                    />
+                                ))}
+                            </div>
+                            <div className="grid grid-cols-3 gap-4 lg:gap-8 w-1/2">
+                                {homeFeatures.slice(3, 6).map((item, index) => (
+                                    <HomeFeatureCard
+                                        key={index + 3}
+                                        imageSrc={item.src}
+                                        imageAlt={item.alt}
+                                        title={item.title}
+                                        description={item.desc}
+                                        animationDelay={index * 0.1}
+                                    />
+                                ))}
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* Mobile: Carousel */}
+                    <div
+                        className="md:hidden relative overflow-hidden py-4 -my-4"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                    >
+                        <div
+                            className="flex transition-transform duration-500 ease-in-out"
+                            style={{ transform: `translateX(-${homeCardIndex * 100}%)` }}
+                        >
+                            {homeFeatures.map((item, index) => (
+                                <HomeFeatureCard
+                                    key={index}
+                                    imageSrc={item.src}
+                                    imageAlt={item.alt}
+                                    title={item.title}
+                                    description={item.desc}
+                                    isMobile={true}
+                                    currentIndex={homeCardIndex}
+                                    totalCards={6}
+                                    onDotClick={handleHomeCardChange}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+
+            {/* NEW SECTION: Why Smart Cloud */}
+            <WhySmartCloud />
+
+        </div>
+    );
+}

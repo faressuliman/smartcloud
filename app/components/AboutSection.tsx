@@ -1,0 +1,125 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { Target, Eye, Heart, ArrowRight, ArrowDownRight } from "lucide-react";
+import CertificationsSlideshow from "./CertificationsSlideshow";
+import SectionHeader from "./SectionHeader";
+import { aboutContent } from "../data/contentData";
+
+export default function AboutSection() {
+    return (
+        <div className="mx-auto max-w-6xl w-full">
+            {/* Vertical Stack Glass Container Section */}
+            <motion.div
+                className="mb-8 pb-8 lg:pb-14 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-start gap-4 md:gap-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+                {/* Header: Title and Icon (on Top) */}
+                <div className="flex items-center gap-4 px-2 sm:px-0">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+                        Who We Are
+                    </h2>
+                    <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                </div>
+
+                {/* Content: Glass Content Card (below) */}
+                <motion.div
+                    className="relative w-full bg-white/40 backdrop-blur-sm border-2 border-slate-200/50 rounded-3xl lg:rounded-4xl shadow-xl shadow-secondary/20 px-6 md:px-10 py-8 md:py-10"
+                >
+                    <p className="text-sm lg:text-base text-slate-700 leading-relaxed text-start">
+                        Smart Cloud specializes in intelligent solutions and integrated systems for hotels, homes, offices,
+                        corporate, and government sectors. We transform environments into smart, safe, and easily controllable spaces.
+                    </p>
+                </motion.div>
+            </motion.div>
+
+            {/* Two Column Layout - Image Left, Timeline Right */}
+            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+                {/* Left - Timeline */}
+                <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.6 }}
+                    className="relative"
+                >
+                    {/* Vertical Timeline Line */}
+                    <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-slate-200" />
+
+                    <div className="space-y-8">
+                        {/* Mission */}
+                        <div className="relative pl-12 sm:pl-16 z-10">
+                            <div className="absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
+                                <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                            </div>
+                            <div className="bg-white rounded-lg p-5 sm:p-6 md:p-7 shadow-lg border-2 border-primary/30 max-w-md">
+                                <span className="inline-block px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold mb-3">
+                                    Mission
+                                </span>
+                                <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+                                    {aboutContent.mission}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Vision */}
+                        <div className="relative pl-12 sm:pl-16 z-10">
+                            <div className="absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
+                                <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                            </div>
+                            <div className="bg-white rounded-lg p-5 sm:p-6 md:p-7 shadow-lg border-2 border-primary/30 max-w-md">
+                                <span className="inline-block px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold mb-3">
+                                    Vision
+                                </span>
+                                <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+                                    {aboutContent.vision}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Values */}
+                        <div className="relative pl-12 sm:pl-16 z-10">
+                            <div className="absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
+                                <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-white fill-white" />
+                            </div>
+                            <div className="bg-white rounded-lg p-5 sm:p-6 md:p-7 shadow-lg border-2 border-primary/30 max-w-md">
+                                <span className="inline-block px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold mb-3">
+                                    Values
+                                </span>
+                                <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+                                    {aboutContent.values}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Right - Image */}
+                <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.6 }}
+                    className="relative"
+                >
+                    <div className="relative rounded-2xl overflow-hidden shadow-xl">
+                        <Image
+                            src="/about/smart-building-automation.jpg"
+                            alt="Smart Building Automation"
+                            width={500}
+                            height={600}
+                            className="w-full h-auto object-cover"
+                        />
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Certifications Slideshow */}
+            <CertificationsSlideshow />
+        </div>
+    );
+}

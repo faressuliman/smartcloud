@@ -1,23 +1,21 @@
 @import "tailwindcss";
-@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-primary: #E5B838;
+  --color-primary-dark: #d4a732;
+  --color-primary-light: #f0c85a;
+  --color-secondary: #67A1BF;
+  --color-secondary-dark: #5a8fa8;
+  --color-secondary-light: #7ab3d1;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --primary: #E5B838;
+  --primary-dark: #d4a732;
+  --primary-light: #f0c85a;
+  --secondary: #67A1BF;
+  --secondary-dark: #5a8fa8;
+  --secondary-light: #7ab3d1;
 }
 
 body {
@@ -26,35 +24,267 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Custom Leaflet Map Styles */
-.leaflet-container {
-  background-color: #0f172a !important;
-  font-family: var(--font-geist-sans);
+/* Custom marker styling for SVG-based map */
+.country-marker {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: all 0.3s ease;
 }
 
-.leaflet-popup-content-wrapper {
-  background-color: #1e293b;
-  color: white;
-  border-radius: 8px;
+.pin-pointer {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  transition: all 0.3s ease;
 }
 
-.leaflet-popup-tip {
-  background-color: #1e293b;
+/* Pulse glow animations for different colors */
+@keyframes pulse-glow-red {
+  0%, 100% {
+    filter: drop-shadow(0 2px 4px rgba(200, 16, 46, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 2px 8px rgba(200, 16, 46, 0.8));
+  }
 }
 
-.leaflet-control-zoom-in,
-.leaflet-control-zoom-out {
-  background-color: #1e293b !important;
-  color: white !important;
-  border: 1px solid #334155 !important;
+@keyframes pulse-glow-green {
+  0%, 100% {
+    filter: drop-shadow(0 2px 4px rgba(0, 108, 53, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 2px 8px rgba(0, 108, 53, 0.8));
+  }
 }
 
-.leaflet-control-zoom-in:hover,
-.leaflet-control-zoom-out:hover {
-  background-color: #334155 !important;
+@keyframes pulse-glow-teal {
+  0%, 100% {
+    filter: drop-shadow(0 2px 4px rgba(103, 161, 191, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 2px 8px rgba(103, 161, 191, 0.8));
+  }
 }
 
-.leaflet-bar {
-  border: 1px solid #334155 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+/* Apply pulse animation to the circle element */
+.egypt-marker {
+  animation: pulse-glow-red 2.5s ease-in-out infinite;
+}
+
+.saudi-marker {
+  animation: pulse-glow-green 2.5s ease-in-out infinite;
+}
+
+.uae-marker {
+  animation: pulse-glow-teal 2.5s ease-in-out infinite;
+}
+
+/* Hover effects for the entire group (g element) */
+g.group:hover .country-marker,
+g:hover .country-marker {
+  stroke-width: 0.8 !important;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 10px rgba(229, 184, 56, 0.6)) !important;
+  transform: scale(1.2); /* Apply scale directly to the circle */
+}
+
+g.group:hover .egypt-marker,
+g:hover .egypt-marker {
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 10px rgba(200, 16, 46, 0.6)) !important;
+  stroke: #C8102E;
+}
+
+g.group:hover .saudi-marker,
+g:hover .saudi-marker {
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 10px rgba(0, 108, 53, 0.6)) !important;
+  stroke: #006C35;
+}
+
+g.group:hover .uae-marker,
+g:hover .uae-marker {
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 10px rgba(103, 161, 191, 0.6)) !important;
+  stroke: #67A1BF;
+}
+
+g.group:hover .pin-pointer,
+g:hover .pin-pointer {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+/* Animation for connecting lines - moving dotted effect */
+@keyframes dash-animation {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -5;
+  }
+}
+
+.connection-curve {
+  animation: dash-animation 0.8s linear infinite;
+}
+
+/* Popup animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translate(-50%, -90%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -100%);
+    opacity: 1;
+  }
+}
+
+.animate-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.slide-in-from-bottom-2 {
+  animation: slide-in-from-bottom 0.3s ease-out;
+}
+
+/* World Map Animations - Give it life */
+@keyframes gentle-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.01);
+  }
+}
+
+@keyframes continent-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(103, 161, 191, 0.2));
+    opacity: 0.6;
+  }
+  50% {
+    filter: drop-shadow(0 0 4px rgba(103, 161, 191, 0.4));
+    opacity: 0.7;
+  }
+}
+
+@keyframes grid-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(10, 10);
+  }
+}
+
+.world-map {
+  animation: gentle-pulse 6s ease-in-out infinite;
+}
+
+.world-map path {
+  animation: continent-glow 4s ease-in-out infinite;
+  transition: all 0.5s ease;
+}
+
+.world-map path:hover {
+  opacity: 0.8 !important;
+  filter: drop-shadow(0 0 6px rgba(103, 161, 191, 0.6)) !important;
+}
+
+/* Connection dots animation */
+.connection-dots circle {
+  animation: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* 3D Perspective and Glassmorphism Effects */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Glassmorphism container hover effect */
+@keyframes container-glow {
+  0%, 100% {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(103, 161, 191, 0.1),
+                inset 0 0 40px rgba(103, 161, 191, 0.05);
+  }
+  50% {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(229, 184, 56, 0.15),
+                inset 0 0 40px rgba(229, 184, 56, 0.08);
+  }
+}
+
+/* Subtle inner glow animation */
+@keyframes inner-glow-pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive popup adjustments */
+@media (max-width: 640px) { /* Small screens/mobile */
+  .absolute.z-50 {
+    min-width: 180px;
+    max-width: 250px;
+    padding: 1rem;
+    font-size: 0.875rem; /* text-sm */
+  }
+  .absolute.z-50 h3 {
+    font-size: 1rem; /* text-base */
+    margin-bottom: 0.5rem;
+  }
+  .absolute.z-50 h3 span {
+    font-size: 1.25rem; /* text-xl */
+  }
+  .absolute.z-50 p {
+    font-size: 0.75rem; /* text-xs */
+    margin-bottom: 0.75rem;
+  }
+  .absolute.z-50 button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Pulse animation for timeline circles */
+@keyframes pulse-circle {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(103, 161, 191, 0.7),
+                inset 0 0 8px rgba(103, 161, 191, 0.3);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 0 8px rgba(103, 161, 191, 0),
+                inset 0 0 12px rgba(103, 161, 191, 0.5);
+  }
+}
+
+.animate-pulse-circle {
+  animation: pulse-circle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

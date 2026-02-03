@@ -1,16 +1,15 @@
 "use client";
 
-import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
+import ContentSection from "./components/ContentSection";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-900 font-[var(--font-geist-sans)]">
-      {/* Navbar */}
-      <Navbar />
-
+    <div className="min-h-screen bg-slate-900 font-(--font-geist-sans)">
       {/* Hero Section */}
-      <HeroSection onScrollToNext={() => {}} />
+      <HeroSection />
+      {/* Content Section */}
+      <ContentSection />
     </div>
   );
 }

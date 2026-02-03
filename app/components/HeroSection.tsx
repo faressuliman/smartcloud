@@ -1,85 +1,152 @@
 "use client";
 
-import { ChevronDown, MapPin } from "lucide-react";
-import { motion } from "framer-motion";
 import { useState, useRef } from "react";
+import Image from "next/image";
+import MapComponent from "./MapComponent";
 
-interface HeroSectionProps {
-  onScrollToNext: () => void;
-}
-
-export default function HeroSection({ onScrollToNext }: HeroSectionProps) {
-  const [showSaudiTooltip, setShowSaudiTooltip] = useState(false);
-  const [showUaeTooltip, setShowUaeTooltip] = useState(false);
+export default function HeroSection() {
+  const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleUaeClick = () => {
     window.open("https://turbotechnikmt.com", "_blank", "noopener,noreferrer");
   };
 
+  const handleSaudiClick = () => {
+    window.dispatchEvent(new CustomEvent("showHome"));
+  };
+
+  const handleEgyptClick = () => {
+    // Add Egypt company link here when available
+    console.log("Egypt clicked");
+  };
+
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center justify-center overflow-hidden pt-20"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden py-12 sm:py-16 md:py-20 lg:py-0 lg:h-screen"
     >
+      {/* Header with Logo */}
+      <div className="absolute top-0 left-0 right-0 z-40 bg-linear-to-b from-slate-900/90 via-slate-900/50 to-transparent py-12 px-4 sm:px-6 md:px-8 lg:px-0">
+        <div className="max-w-7xl mx-auto flex items-center justify-start">
+          <Image
+            src="/hero/smartcloud.png"
+            alt="Smart Cloud Logo"
+            width={80}
+            height={60}
+            className="h-auto w-auto max-w-20 sm:max-w-24 md:max-w-28"
+            priority
+          />
+        </div>
+      </div>
       {/* Background Video - Always running */}
-      <div className="absolute inset-0 top-20">
+      <div
+        className="absolute inset-0"
+        style={{
+          transform: "translateZ(0)",
+          willChange: "transform",
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden"
+        }}
+      >
         <video
           ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
+          preload="metadata"
+          disablePictureInPicture
+          disableRemotePlayback
           className="h-full w-full object-cover"
-          style={{ objectPosition: "center bottom" }}
-          poster="/posterImage.png"
+          style={{
+            objectPosition: "center bottom",
+            transform: "translateZ(0)",
+            willChange: "auto",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            pointerEvents: "none",
+            isolation: "isolate"
+          }}
+          poster="/hero/posterImage.png"
         >
-          <source src="/backgroundvid.mp4" type="video/mp4" />
+          <source src="/hero/bgvideo.mp4" type="video/mp4" />
         </video>
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/70 to-slate-900/80" />
+        <div className="absolute inset-0 bg-linear-to-b from-slate-900/80 via-slate-900/70 to-slate-900/80" />
       </div>
 
-      {/* Content Container */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-8 px-6 lg:flex-row lg:items-center lg:justify-between">
+      {/* Content Container - Left-aligned with padding */}
+      <div className="relative z-10 flex w-full max-w-7xl flex-col gap-8 px-4 sm:gap-10 sm:px-5 md:px-6 lg:flex-row lg:items-center lg:gap-32 lg:px-0">
         {/* Left Side - Text Content */}
-        <div className="max-w-2xl">
-          <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-            Transforming Vision Into Reality
-          </h1>
-          
-          <p className="text-white/90 text-base lg:text-lg leading-relaxed mb-6">
-            We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
-          </p>
+        <div className="w-full max-w-full sm:max-w-2xl mx-auto sm:mx-0 lg:text-left">
+          {/* Mobile text */}
+          <div className="block lg:hidden space-y-3">
+            <h1 className="text-xl sm:text-2xl font-bold text-white leading-tight">
+              Delivering Intelligent Technology Solutions
+            </h1>
+            <p className="text-white/90 text-sm sm:text-base">
+              We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
+            </p>
+            <p className="text-white/90 text-sm sm:text-base">
+              Operating in Egypt, Saudi Arabia & UAE
+            </p>
+            <p className="font-semibold text-primary text-sm sm:text-base">
+              Choose your country to continue
+            </p>
+          </div>
 
-          <p className="text-[#E5B838] text-lg lg:text-xl font-semibold mb-8 lg:mb-0">
-            Two Regional Offices: Saudi Arabia & UAE
-          </p>
+          {/* Desktop text */}
+          <div className="hidden lg:block">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5 md:mb-6 leading-tight">
+              Delivering Intelligent Technology Solutions
+            </h1>
 
-          {/* Mobile Location Buttons - Horizontal Layout */}
-          <div className="flex lg:hidden items-center justify-center gap-4 mt-8">
+            <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-5 sm:mb-6 md:mb-7">
+              We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
+            </p>
+
+            <div className="space-y-2 sm:space-y-2.5">
+              <p className="text-primary text-base sm:text-lg md:text-xl lg:text-xl font-semibold">
+                Three Regional Offices: Egypt, Saudi Arabia & UAE
+              </p>
+              <p className="text-white/70 text-sm sm:text-base md:text-base">
+                Select your regional office to explore location-specific services and <br /> connect with our local team.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Section - Flag Buttons with Dotted Line */}
+        <div className="w-full lg:hidden flex">
+          <div className="flex items-center gap-3 sm:gap-4">
             {/* Saudi Arabia Button */}
             <button
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#E5B838]/90 backdrop-blur-sm border-2 border-white/20 shadow-lg hover:scale-105 transition-all cursor-pointer"
+              onClick={handleSaudiClick}
+              className="flex items-center gap-1 px-2.5 py-2 sm:px-3 sm:py-2.5 rounded-full bg-primary/90 backdrop-blur-sm border-2 border-white/20 shadow-lg hover:scale-105 transition-all cursor-pointer whitespace-nowrap"
             >
-              <MapPin className="w-4 h-4 text-[#1e3a5f]" />
-              <span className="text-xs font-bold text-[#1e3a5f]">Saudi Arabia</span>
+              <img
+                src="https://flagcdn.com/w40/sa.png"
+                alt="Saudi Arabia Flag"
+                className="w-4 h-3 sm:w-5 sm:h-4 object-cover rounded shrink-0"
+              />
+              <span className="text-[10px] sm:text-xs font-bold text-[#1e3a5f]">Saudi Arabia</span>
             </button>
 
-            {/* Horizontal Curved Dotted Line Connector */}
-            <svg 
-              className="opacity-80 flex-shrink-0" 
-              width="48" 
-              height="20"
-              viewBox="0 0 48 20"
+            {/* First Curved Dotted Line Connector (Saudi to UAE) */}
+            <svg
+              className="opacity-80 shrink-0"
+              width="24"
+              height="16"
+              viewBox="0 0 24 16"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path 
-                d="M0 10 Q 12 4, 24 10 Q 36 16, 48 10" 
-                stroke="#E5B838" 
-                strokeWidth="2" 
-                strokeDasharray="4 4"
+              <path
+                d="M0 8 Q 6 3, 12 8 Q 18 13, 24 8"
+                stroke="#E5B838"
+                strokeWidth="2"
+                strokeDasharray="3 3"
                 strokeLinecap="round"
                 fill="none"
               />
@@ -88,96 +155,97 @@ export default function HeroSection({ onScrollToNext }: HeroSectionProps) {
             {/* UAE Button */}
             <button
               onClick={handleUaeClick}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#67A1BF]/90 backdrop-blur-sm border-2 border-white/20 shadow-lg hover:scale-105 hover:bg-[#67A1BF] transition-all cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-2 sm:px-3 sm:py-2.5 rounded-full bg-secondary/90 backdrop-blur-sm border-2 border-white/20 shadow-lg hover:scale-105 hover:bg-secondary transition-all cursor-pointer whitespace-nowrap"
             >
-              <MapPin className="w-4 h-4 text-white" />
-              <span className="text-xs font-bold text-white">UAE</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Right Side - Location Buttons (Hidden on mobile) */}
-        <div className="hidden lg:flex flex-col relative">
-          {/* Saudi Arabia Button */}
-          <div className="relative">
-            <button
-              onMouseEnter={() => setShowSaudiTooltip(true)}
-              onMouseLeave={() => setShowSaudiTooltip(false)}
-              className="flex items-center gap-3 px-6 py-3 rounded-full bg-[#E5B838]/90 backdrop-blur-sm border-2 border-white/20 shadow-lg hover:scale-105 transition-all cursor-pointer animate-pulse"
-              style={{ animationDuration: '3s' }}
-            >
-              <MapPin className="w-5 h-5 text-[#1e3a5f]" />
-              <span className="text-sm font-bold text-[#1e3a5f]">Saudi Arabia</span>
+              <img
+                src="https://flagcdn.com/w40/ae.png"
+                alt="UAE Flag"
+                className="w-4 h-3 sm:w-5 sm:h-4 object-cover rounded shrink-0"
+              />
+              <span className="text-[10px] sm:text-xs font-bold text-white">UAE</span>
             </button>
 
-            {/* Saudi Arabia Tooltip */}
-            {showSaudiTooltip && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#E5B838] text-[#1e3a5f] px-4 py-2 rounded-lg shadow-lg text-sm font-medium animate-in fade-in duration-200">
-                Riyadh, Saudi Arabia
-              </div>
-            )}
-          </div>
-
-          {/* Curved Dotted Line Connector - VERTICAL for Desktop */}
-          <div className="flex justify-center my-2">
-            <svg 
-              className="opacity-80" 
-              width="20" 
-              height="48"
-              viewBox="0 0 20 48"
+            {/* Second Curved Dotted Line Connector (UAE to Egypt) */}
+            <svg
+              className="opacity-80 shrink-0"
+              width="24"
+              height="16"
+              viewBox="0 0 24 16"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path 
-                d="M10 0 Q 16 12, 10 24 Q 4 36, 10 48" 
-                stroke="#E5B838" 
-                strokeWidth="2" 
-                strokeDasharray="4 4"
+              <path
+                d="M0 8 Q 6 3, 12 8 Q 18 13, 24 8"
+                stroke="#E5B838"
+                strokeWidth="2"
+                strokeDasharray="3 3"
                 strokeLinecap="round"
                 fill="none"
               />
             </svg>
-          </div>
 
-          {/* UAE Button */}
-          <div className="relative">
+            {/* Egypt Button */}
             <button
-              onMouseEnter={() => setShowUaeTooltip(true)}
-              onMouseLeave={() => setShowUaeTooltip(false)}
-              onClick={handleUaeClick}
-              className="flex items-center gap-3 px-6 py-3 rounded-full bg-[#67A1BF]/90 backdrop-blur-sm border-2 border-white/20 shadow-lg hover:scale-105 hover:bg-[#67A1BF] transition-all cursor-pointer animate-pulse"
-              style={{ animationDuration: '3s', animationDelay: '0.5s' }}
+              onClick={handleEgyptClick}
+              className="flex items-center gap-1 px-2.5 py-2 sm:px-3 sm:py-2.5 rounded-full bg-primary/90 backdrop-blur-sm border-2 border-white/20 shadow-lg hover:scale-105 transition-all cursor-pointer whitespace-nowrap"
             >
-              <MapPin className="w-5 h-5 text-white" />
-              <span className="text-sm font-bold text-white">UAE</span>
+              <img
+                src="https://flagcdn.com/w40/eg.png"
+                alt="Egypt Flag"
+                className="w-4 h-3 sm:w-5 sm:h-4 object-cover rounded shrink-0"
+              />
+              <span className="text-[10px] sm:text-xs font-bold text-[#1e3a5f]">Egypt</span>
             </button>
+          </div>
+        </div>
 
-            {/* UAE Tooltip */}
-            {showUaeTooltip && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#67A1BF] text-white px-4 py-2 rounded-lg shadow-lg text-sm animate-in fade-in duration-200">
-                <div className="font-medium mb-0.5">Dubai, United Arab Emirates</div>
-                <div className="text-xs text-white/80">Click to explore</div>
+        {/* Desktop Section - Interactive Regional Branch Selector */}
+        <div className="hidden lg:block w-full lg:w-125 relative z-20">
+          {/* Glassmorphism Container */}
+          <div className="relative">
+            {/* Container Shadow Layer */}
+            <div className="absolute inset-0 bg-linear-to-br from-slate-950/40 via-slate-900/30 to-slate-950/40 rounded-xl sm:rounded-2xl blur-xl transform translate-y-2 translate-x-1 scale-95" />
+
+            {/* Main Container */}
+            <div className="relative bg-linear-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-6 border border-slate-700/50 shadow-2xl transform-gpu transition-all duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+              {/* Inner Glow Accents */}
+              <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-linear-to-br from-secondary/10 via-transparent to-primary/10 pointer-events-none" />
+              <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-secondary/50 to-transparent rounded-t-xl sm:rounded-t-2xl" />
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent rounded-b-xl sm:rounded-b-2xl" />
+
+              {/* Header Section */}
+              <div className="mb-4 sm:mb-4 text-center">
+                <h2 className="text-base sm:text-lg font-semibold text-white mb-1">
+                  Regional Branch Selector
+                </h2>
+                <p className="text-xs sm:text-xs text-white/60">
+                  Choose your regional office to continue
+                </p>
               </div>
-            )}
+
+              {/* Map Container */}
+              <div className="relative w-full h-62.5 min-[375px]:h-67.5 sm:h-75 md:h-85 lg:h-90 overflow-visible">
+                <div className="absolute inset-0 bg-linear-to-b from-slate-800/20 to-slate-900/20 rounded-lg sm:rounded-xl -m-1 sm:-m-2" />
+                <div className="relative w-full h-full">
+                  <MapComponent
+                    hoveredCountry={hoveredCountry}
+                    setHoveredCountry={setHoveredCountry}
+                    handleUaeClick={handleUaeClick}
+                  />
+                </div>
+              </div>
+
+              {/* Footer Hint */}
+              <div className="mt-4 sm:mt-4 text-center">
+                <p className="text-xs sm:text-xs text-white/50 flex items-center justify-center gap-1.5">
+                  <span className="inline-block w-1.5 sm:w-1.5 h-1.5 sm:h-1.5 rounded-full bg-secondary" />
+                  <span>Click a location pin to explore services</span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Scroll Down Button */}
-      <motion.button
-        onClick={onScrollToNext}
-        aria-label="Scroll to next section"
-        className="absolute bottom-20 sm:bottom-16 md:bottom-6 left-1/2 z-10 -translate-x-1/2 cursor-pointer"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{
-          y: { duration: 1.5, repeat: Infinity, delay: 1 },
-        }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <ChevronDown className="h-8 w-8 text-cyan-400" aria-hidden="true" />
-      </motion.button>
 
     </section>
   );
