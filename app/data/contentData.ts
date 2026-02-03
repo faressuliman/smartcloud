@@ -44,7 +44,7 @@ export const homeFeatures = [
         src: "/services/client-needs.png",
         alt: "Understand Client Needs",
         title: "Understand The Client's Needs",
-        desc: "We take time to understand your unique requirements and challenges, delivering customized solutions that perfectly fit your business needs."
+        desc: "We take time to understand your unique requirements, delivering customized solutions that perfectly fit your business needs."
     },
     {
         src: "/services/deliver.png",
