@@ -76,7 +76,7 @@ export const partnerLogos = [
     { id: 12, src: "/partners/12.png" },
     { id: 13, src: "/partners/13.png" },
     { id: 14, src: "/partners/14.png" },
-    { id: 15, src: "/partners/15.jfif" },
+    { id: 15, src: "/partners/15.png" },
     { id: 16, src: "/partners/16.png" },
     { id: 17, src: "/partners/17.jpg" },
     { id: 18, src: "/partners/18.png" },
