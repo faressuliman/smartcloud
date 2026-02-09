@@ -1,13 +1,102 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Target, Eye } from "lucide-react";
-import ServiceSlider from "./ServiceSlider";
-import SectionHeader from "./SectionHeader";
-import { aboutContent } from "../data/contentData";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ArrowRight, ArrowDownRight } from "lucide-react";
+import ServiceCard from "./ServiceCard";
+import { services } from "../data/contentData";
 
 export default function ServicesSection() {
-    return (
-        <div className="text-center h-100">Services</div>
-    );
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const currentService = services[currentIndex];
+
+  const nextService = () => {
+    setCurrentIndex((prev) => (prev + 1) % services.length);
+  };
+
+  const prevService = () => {
+    setCurrentIndex((prev) => (prev - 1 + services.length) % services.length);
+  };
+
+  const goToService = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <div className="mx-auto max-w-6xl w-full">
+        <motion.div
+          className="mb-8 pb-8 lg:pb-14 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <div className="flex items-center gap-4 px-2 sm:px-0">
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+              Our Services
+            </h2>
+            <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+          </div>
+
+          <motion.div
+            className="relative w-full bg-white/40 backdrop-blur-sm border-2 border-slate-200/50 rounded-3xl lg:rounded-4xl shadow-xl shadow-secondary/20 px-6 md:px-10 py-8 md:py-10"
+          >
+            <p className="text-sm lg:text-base text-slate-600 leading-relaxed text-start">
+              From smart mosque automation to cutting-edge IoT solutions, we deliver comprehensive technical services across six specialized domains. Each service is designed to enhance efficiency, reduce costs, and bring intelligent automation to your facilities.
+            </p>
+          </motion.div>
+        </motion.div>
+
+        <motion.div 
+          className="relative px-2 sm:px-4 lg:px-0"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+        >
+          <div className="rounded-3xl overflow-hidden shadow-2xl">
+            <div className="flex flex-col lg:flex-row h-175 relative">
+              <AnimatePresence mode="sync" initial={false}>
+                <ServiceCard
+                  key={currentIndex}
+                  service={currentService}
+                  currentIndex={currentIndex}
+                  onPrev={prevService}
+                  onNext={nextService}
+                />
+              </AnimatePresence>
+
+              <button
+                onClick={prevService}
+                className="hidden lg:flex absolute left-4 sm:left-5 lg:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-primary shadow-lg items-center justify-center text-white hover:bg-primary-dark transition-all duration-300 hover:scale-110 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <motion.div 
+            className="flex justify-center gap-2 mt-6 lg:mt-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            {services.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => goToService(idx)}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  idx === currentIndex
+                    ? 'bg-primary w-8 h-2.5'
+                    : 'bg-slate-300 w-2.5 h-2.5 hover:bg-slate-400'
+                }`}
+                aria-label={`Go to service ${idx + 1}`}
+              />
+            ))}
+          </motion.div>
+        </motion.div>
+    </div>
+  );
 }

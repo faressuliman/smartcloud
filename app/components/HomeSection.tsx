@@ -5,8 +5,7 @@ import { ArrowDownRight, ArrowRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import HomeFeatureCard from "./HomeFeatureCard";
 import WhySmartCloud from "./WhySmartCloud";
-import SectionHeader from "./SectionHeader";
-import { homeFeatures } from "../data/contentData";
+import { homeFeatures, sliderConfig } from "../data/contentData";
 
 interface HomeSectionProps {
     isNavigated: boolean;
@@ -19,16 +18,13 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
     const [touchEnd, setTouchEnd] = useState(0);
     const homeCardIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Auto-advance home cards on mobile
     useEffect(() => {
-        // Clear any existing interval
         if (homeCardIntervalRef.current) {
             clearInterval(homeCardIntervalRef.current);
         }
-        // Set new interval
         homeCardIntervalRef.current = setInterval(() => {
             setHomeCardIndex((prev) => (prev + 1) % 6);
-        }, 5000);
+        }, sliderConfig.homeCardsAutoPlayInterval);
         return () => {
             if (homeCardIntervalRef.current) {
                 clearInterval(homeCardIntervalRef.current);
@@ -43,7 +39,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
         }
         homeCardIntervalRef.current = setInterval(() => {
             setHomeCardIndex((current) => (current + 1) % 6);
-        }, 5000);
+        }, sliderConfig.homeCardsAutoPlayInterval);
     };
 
     const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX);
@@ -57,40 +53,41 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
 
     return (
         <div className="mx-auto max-w-6xl w-full">
-            {/* Vertical Stack Glass Container Section */}
             <motion.div
-                className="mb-8 pb-8 lg:pb-14 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-start gap-4 md:gap-6"
+                className="mb-8 pb-8 lg:pb-14 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.35 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
             >
-                {/* Header: Title and Icon (on Top) */}
                 <div className="flex items-center gap-4 px-2 sm:px-0">
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-                        Our Expertise
+                    <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+                        Welcome to Smart Cloud
                     </h2>
                     <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
                 </div>
 
-                {/* Content: Glass Content Card (below) */}
                 <motion.div
                     className="relative w-full bg-white/40 backdrop-blur-sm border-2 border-slate-200/50 rounded-3xl lg:rounded-4xl shadow-xl shadow-secondary/20 px-6 md:px-10 py-8 md:py-10"
                 >
-                    <p className="text-sm lg:text-base text-slate-600 leading-relaxed text-start">
+                    <motion.p 
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="text-sm lg:text-base text-slate-600 leading-relaxed text-start"
+                    >
                         Smart Cloud is a leading provider of intelligent technology solutions, specializing in smart automation, ELV systems, and marine technical supplies. With years of expertise, we ensure the highest standards of quality and reliability for all your technology needs.
-                    </p>
+                    </motion.p>
                 </motion.div>
             </motion.div>
 
-            {/* Grouped What We Can Do For You Section with Precise Animation Trigger */}
             <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.4 }}
             >
-                {/* Unified What We Can Do For You Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -98,15 +95,13 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                     transition={{ duration: 0.6, ease: "easeOut" }}
                     className="mb-2 pb-2 border-b border-slate-200/60 px-4 md:px-4 lg:px-0 flex items-center gap-4"
                 >
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+                    <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
                         What We Can Do For You
                     </h2>
                     <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
                 </motion.div>
 
-                {/* Feature Blocks - Carousel */}
                 <div className="relative md:px-4 lg:px-0">
-                    {/* Controls Header (Desktop/Tablet) */}
                     <div className="hidden md:flex items-center justify-between mb-8 relative z-10">
                         <div className="flex gap-1">
                             <button
@@ -130,7 +125,6 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                         </button>
                     </div>
 
-                    {/* Desktop/Tablet: Carousel Layout */}
                     <div className="hidden md:block overflow-hidden py-4 -my-4">
                         <motion.div
                             className="flex"
@@ -142,8 +136,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                                 {homeFeatures.slice(0, 3).map((item, index) => (
                                     <HomeFeatureCard
                                         key={index}
-                                        imageSrc={item.src}
-                                        imageAlt={item.alt}
+                                        icon={item.icon}
                                         title={item.title}
                                         description={item.desc}
                                         animationDelay={index * 0.1}
@@ -154,8 +147,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                                 {homeFeatures.slice(3, 6).map((item, index) => (
                                     <HomeFeatureCard
                                         key={index + 3}
-                                        imageSrc={item.src}
-                                        imageAlt={item.alt}
+                                        icon={item.icon}
                                         title={item.title}
                                         description={item.desc}
                                         animationDelay={index * 0.1}
@@ -165,7 +157,6 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                         </motion.div>
                     </div>
 
-                    {/* Mobile: Carousel */}
                     <div
                         className="md:hidden relative overflow-hidden py-4 -my-4"
                         onTouchStart={handleTouchStart}
@@ -179,8 +170,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                             {homeFeatures.map((item, index) => (
                                 <HomeFeatureCard
                                     key={index}
-                                    imageSrc={item.src}
-                                    imageAlt={item.alt}
+                                    icon={item.icon}
                                     title={item.title}
                                     description={item.desc}
                                     isMobile={true}
@@ -194,7 +184,6 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                 </div>
             </motion.div>
 
-            {/* NEW SECTION: Why Smart Cloud */}
             <WhySmartCloud />
 
         </div>

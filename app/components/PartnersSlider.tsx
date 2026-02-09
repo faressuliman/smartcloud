@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ArrowDownRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { certificationLogos, sliderConfig } from "../data/contentData";
+import { partnerLogos, sliderConfig } from "../data/contentData";
 
-export default function CertificationsSlideshow() {
+export default function PartnersSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [windowWidth, setWindowWidth] = useState(1024);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
@@ -21,13 +21,13 @@ export default function CertificationsSlideshow() {
   const getLogosPerSlide = () => {
     if (windowWidth < 640) return 3;
     if (windowWidth < 1024) return 4;
-    return sliderConfig.certificationsPerSlide;
+    return sliderConfig.partnersPerSlide;
   };
 
   const logosPerSlide = getLogosPerSlide();
-  const slides: typeof certificationLogos[] = [];
-  for (let i = 0; i < certificationLogos.length; i += logosPerSlide) {
-    slides.push(certificationLogos.slice(i, i + logosPerSlide));
+  const slides: typeof partnerLogos[] = [];
+  for (let i = 0; i < partnerLogos.length; i += logosPerSlide) {
+    slides.push(partnerLogos.slice(i, i + logosPerSlide));
   };
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function CertificationsSlideshow() {
     if (autoPlayRef.current) clearInterval(autoPlayRef.current);
     autoPlayRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, sliderConfig.certificationsAutoPlayInterval);
+    }, sliderConfig.partnersAutoPlayInterval);
   };
 
   const stopAutoPlay = () => {
@@ -59,24 +59,24 @@ export default function CertificationsSlideshow() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8 }}
-      className="w-full mt-12 sm:mt-16 pb-14 mb-14 border-b border-slate-200/60"
-    >
-      <div className="w-full px-4 sm:px-8 lg:px-12 mb-4 sm:mb-8">
+    <div className="w-full bg-white pt-6 pb-9 shadow-4xl">
+      <motion.div
+        className="w-full px-4 sm:px-8 lg:px-12 mb"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.35 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         <div className="flex items-center justify-between">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex items-center gap-2 sm:gap-4"
+            className="flex items-center gap-4"
           >
             <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-              Certifications
+              Our Partners
             </h2>
             <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
           </motion.div>
@@ -84,55 +84,58 @@ export default function CertificationsSlideshow() {
           <div className="flex items-center gap-3">
             <button
               onClick={handlePrevSlide}
-              className="h-6 w-6 sm:h-10 sm:w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer"
+              className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer"
               aria-label="Previous slide"
             >
-              <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6 text-slate-700" />
+              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 text-slate-700" />
             </button>
             <button
               onClick={handleNextSlide}
-              className="h-6 w-6 sm:h-10 sm:w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer"
+              className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer"
               aria-label="Next slide"
             >
-              <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6 text-slate-700" />
+              <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 text-slate-700" />
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="w-full px-4 sm:px-8 lg:px-12">
-        <div
-          className="bg-white rounded-2xl p-2 sm:p-6 overflow-hidden"
-          onMouseEnter={stopAutoPlay}
-          onMouseLeave={startAutoPlay}
+      <motion.div
+        className="w-full px-4 sm:px-8 lg:px-12 overflow-hidden"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+        onMouseEnter={stopAutoPlay}
+        onMouseLeave={startAutoPlay}
+      >
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-4 lg:gap-6"
         >
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.5 }}
-            className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-6"
-          >
-          {slides[currentSlide]?.map((cert, index) => (
+          {slides[currentSlide]?.map((partner, index) => (
             <motion.div
-              key={cert.id}
+              key={partner.id}
               initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="relative w-full h-24 lg:h-32 rounded-xl overflow-hidden transition-all"
+              className="relative w-full h-24 lg:h-32 rounded-xl overflow-hidden bg-white transition-all"
             >
               <Image
-                src={cert.src}
-                alt={`Certification ${cert.id}`}
+                src={partner.src}
+                alt={`Partner ${partner.id}`}
                 fill
                 className="object-contain p-3 lg:p-4 hover:scale-105 transition-transform duration-300"
               />
             </motion.div>
           ))}
         </motion.div>
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }

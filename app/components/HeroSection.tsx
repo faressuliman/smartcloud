@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { useRef } from "react";
 import Image from "next/image";
-import MapComponent from "./MapComponent";
+import InteractiveMap from "./InteractiveMap";
 
 export default function HeroSection() {
-  const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleUaeClick = () => {
@@ -27,8 +27,8 @@ export default function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden py-12 sm:py-16 md:py-20 lg:py-0 lg:h-screen"
     >
       {/* Header with Logo */}
-      <div className="absolute top-0 left-0 right-0 z-40 bg-linear-to-b from-slate-900/90 via-slate-900/50 to-transparent py-12 px-4 sm:px-6 md:px-8 lg:px-0">
-        <div className="max-w-7xl mx-auto flex items-center justify-start">
+      <div className="absolute top-0 left-0 right-0 z-40 bg-linear-to-b from-slate-900/90 via-slate-900/50 to-transparent py-12 px-4 sm:px-8 lg:px-12">
+        <div className="w-full flex items-center justify-start">
           <Image
             src="/hero/smartcloud.png"
             alt="Smart Cloud Logo"
@@ -68,7 +68,7 @@ export default function HeroSection() {
             pointerEvents: "none",
             isolation: "isolate"
           }}
-          poster="/hero/posterImage.png"
+          poster="/hero/poster.png"
         >
           <source src="/hero/bgvideo.mp4" type="video/mp4" />
         </video>
@@ -77,44 +77,99 @@ export default function HeroSection() {
       </div>
 
       {/* Content Container - Left-aligned with padding */}
-      <div className="relative z-10 flex w-full max-w-7xl flex-col gap-8 px-4 sm:gap-10 sm:px-5 md:px-6 lg:flex-row lg:items-center lg:gap-32 lg:px-0">
+      <div className="relative z-10 flex w-full flex-col gap-8 px-4 sm:gap-10 sm:px-8 lg:flex-row lg:items-center lg:gap-32 lg:px-12">
         {/* Left Side - Text Content */}
         <div className="w-full max-w-full sm:max-w-2xl mx-auto sm:mx-0 lg:text-left">
           {/* Mobile text */}
-          <div className="block lg:hidden space-y-3">
-            <h1 className="text-xl sm:text-2xl font-bold text-white leading-tight">
+          <motion.div 
+            className="block lg:hidden space-y-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.h1 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-xl sm:text-2xl font-bold text-white leading-tight"
+            >
               Delivering Intelligent Technology Solutions
-            </h1>
-            <p className="text-white/90 text-sm sm:text-base">
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-white/90 text-sm sm:text-base"
+            >
               We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
-            </p>
-            <p className="text-white/90 text-sm sm:text-base">
-              Operating in Egypt, Saudi Arabia & UAE
-            </p>
-            <p className="font-semibold text-primary text-sm sm:text-base">
+            </motion.p>
+            <motion.p 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="text-white/90 text-sm sm:text-base"
+            >
+              Operating in Saudi Arabia, UAE and Egypt
+            </motion.p>
+            <motion.p 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="font-semibold text-primary text-sm sm:text-base"
+            >
               Choose your country to continue
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* Desktop text */}
-          <div className="hidden lg:block">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5 md:mb-6 leading-tight">
+          <motion.div 
+            className="hidden lg:block"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.h1 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5 md:mb-6 leading-tight"
+            >
               Delivering Intelligent Technology Solutions
-            </h1>
+            </motion.h1>
 
-            <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-5 sm:mb-6 md:mb-7">
+            <motion.p 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-5 sm:mb-6 md:mb-7"
+            >
               We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
-            </p>
+            </motion.p>
 
-            <div className="space-y-2 sm:space-y-2.5">
-              <p className="text-primary text-base sm:text-lg md:text-xl lg:text-xl font-semibold">
-                Three Regional Offices: Egypt, Saudi Arabia & UAE
-              </p>
-              <p className="text-white/70 text-sm sm:text-base md:text-base">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="space-y-2 sm:space-y-2.5"
+            >
+              <motion.p 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="text-primary text-base sm:text-lg md:text-xl lg:text-xl font-semibold"
+              >
+                Three Regional Offices: Saudi Arabia, UAE and Egypt
+              </motion.p>
+              <motion.p 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+                className="text-white/70 text-sm sm:text-base md:text-base"
+              >
                 Select your regional office to explore location-specific services and <br /> connect with our local team.
-              </p>
-            </div>
-          </div>
+              </motion.p>
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* Mobile Section - Flag Buttons with Dotted Line */}
@@ -199,6 +254,9 @@ export default function HeroSection() {
           </div>
         </div>
 
+        {/* Spacer for Desktop to push map to right */}
+        <div className="hidden lg:block lg:flex-1" />
+
         {/* Desktop Section - Interactive Regional Branch Selector */}
         <div className="hidden lg:block w-full lg:w-125 relative z-20">
           {/* Glassmorphism Container */}
@@ -207,7 +265,7 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-linear-to-br from-slate-950/40 via-slate-900/30 to-slate-950/40 rounded-xl sm:rounded-2xl blur-xl transform translate-y-2 translate-x-1 scale-95" />
 
             {/* Main Container */}
-            <div className="relative bg-linear-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-6 border border-slate-700/50 shadow-2xl transform-gpu transition-all duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+            <div className="relative bg-linear-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-6 border border-slate-700/50 shadow-2xl">
               {/* Inner Glow Accents */}
               <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-linear-to-br from-secondary/10 via-transparent to-primary/10 pointer-events-none" />
               <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-secondary/50 to-transparent rounded-t-xl sm:rounded-t-2xl" />
@@ -227,11 +285,7 @@ export default function HeroSection() {
               <div className="relative w-full h-62.5 min-[375px]:h-67.5 sm:h-75 md:h-85 lg:h-90 overflow-visible">
                 <div className="absolute inset-0 bg-linear-to-b from-slate-800/20 to-slate-900/20 rounded-lg sm:rounded-xl -m-1 sm:-m-2" />
                 <div className="relative w-full h-full">
-                  <MapComponent
-                    hoveredCountry={hoveredCountry}
-                    setHoveredCountry={setHoveredCountry}
-                    handleUaeClick={handleUaeClick}
-                  />
+                  <InteractiveMap />
                 </div>
               </div>
 

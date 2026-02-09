@@ -23,14 +23,11 @@ export default function ContentSection() {
     setIsNavVisible(true);
     isProgrammaticScrollRef.current = true;
 
-    // Use requestAnimationFrame to ensure React state updates are scheduled
-    // before the DOM scroll operation begins, preventing race conditions.
     requestAnimationFrame(() => {
       if (sectionRef.current) {
         sectionRef.current.scrollIntoView({ behavior: "smooth" });
       }
 
-      // Reset the programmatic scroll lock after the smooth scroll finishes
       setTimeout(() => {
         isProgrammaticScrollRef.current = false;
         lastScrollYRef.current = window.scrollY;
@@ -45,7 +42,6 @@ export default function ContentSection() {
     window.addEventListener("showAbout" as any, handleShowAbout);
     window.addEventListener("showHome" as any, handleShowHome);
 
-    // Track scroll for "Is Navigated" state reset
     let scrollTimeout: NodeJS.Timeout;
     const handleScrollReset = () => {
       clearTimeout(scrollTimeout);
@@ -70,7 +66,6 @@ export default function ContentSection() {
     };
   }, [isNavigated]);
 
-  // Separate effect for scroll-to-hide logic
   useEffect(() => {
     const handleScrollDirection = () => {
       if (isProgrammaticScrollRef.current) return;
@@ -105,12 +100,10 @@ export default function ContentSection() {
           }}
         />
 
-        {/* Section Indicator - Desktop */}
         <div className="hidden lg:block absolute right-4 z-50 lg:right-6" style={{ top: "50vh", transform: "translateY(-50%)" }}>
           <SectionIndicator activeSection={activeSection} onSectionChange={navigateToSection} />
         </div>
 
-        {/* Content Container */}
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 pt-10 sm:pt-16 md:pt-12 lg:pt-0">
 
           {activeSection === 0 && <HomeSection isNavigated={isNavigated} />}
@@ -124,9 +117,8 @@ export default function ContentSection() {
         </div>
       </section>
 
-      {/* Mobile & Tablet Navigation - Fixed Bottom (hide on desktop) */}
       <motion.div
-        className="fixed bottom-0 left-0 w-full z-[1000] block lg:hidden"
+        className="fixed bottom-0 left-0 w-full z-1000 block lg:hidden"
         initial={{ y: 0 }}
         animate={{ y: isNavVisible ? 0 : 120 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -145,7 +137,6 @@ export default function ContentSection() {
                   className="relative flex flex-1 flex-col items-center justify-center gap-1 py-1 transition-all duration-300 cursor-pointer"
                   whileTap={{ scale: 0.9 }}
                 >
-                  {/* Active Indicator Capsule */}
                   {isActive && (
                     <motion.div
                       layoutId="navbar-indicator"

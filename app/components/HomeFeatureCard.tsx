@@ -1,11 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
+import { LucideIcon } from "lucide-react";
 
 interface HomeFeatureCardProps {
-  imageSrc: string;
-  imageAlt: string;
+  icon: LucideIcon;
   title: string;
   description: string;
   isMobile?: boolean;
@@ -16,8 +15,7 @@ interface HomeFeatureCardProps {
 }
 
 export default function HomeFeatureCard({
-  imageSrc,
-  imageAlt,
+  icon: Icon,
   title,
   description,
   isMobile = false,
@@ -27,30 +25,38 @@ export default function HomeFeatureCard({
   onDotClick,
 }: HomeFeatureCardProps) {
   const cardContent = (
-    <div className={`relative z-10 bg-white border border-secondary/30 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${isMobile
-      ? "p-6 pb-8 h-82 flex flex-col"
-      : "p-4 sm:p-6 md:p-4 lg:p-8 h-full flex flex-col"
+    <div className={`relative z-10 bg-white border-2 border-secondary/30 rounded-xl shadow-lg transition-all duration-300 hover:shadow-secondary-dark ${isMobile
+      ? "p-6 pb-8 h-82 flex flex-col items-center text-center"
+      : "p-4 sm:p-6 md:p-4 lg:p-8 h-full flex flex-col items-center text-center"
       }`}>
-      <div className="mb-4 sm:mb-6 md:mb-3 lg:mb-6 flex items-center justify-start">
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          width={120}
-          height={120}
-          className="h-auto w-auto max-w-25 sm:max-w-30 md:max-w-20 lg:max-w-30"
-        />
+      <div className="mb-4 sm:mb-6 md:mb-3 lg:mb-6 flex items-center justify-center w-full">
+        <div className="p-5 rounded-xl bg-secondary/5 inline-flex items-center justify-center group-hover:bg-secondary/10 transition-colors duration-300">
+          <Icon className="w-8 h-8 lg:w-12 lg:h-12 text-secondary" strokeWidth={1.3} />
+        </div>
       </div>
-      <div className="flex items-center gap-2 mb-3 md:mb-2 lg:mb-3 text-left">
-        <h3 className="text-xl sm:text-lg md:text-base lg:text-xl font-bold text-slate-900">
+      <div className="flex items-center justify-center gap-2 mb-3 md:mb-2 lg:mb-3">
+        <motion.h3 
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-xl sm:text-lg md:text-base lg:text-xl font-bold text-slate-900"
+        >
           {title}
-        </h3>
+        </motion.h3>
       </div>
-      <p className={`text-slate-600 leading-relaxed text-left ${isMobile
+      <motion.p 
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+        className={`text-slate-600 leading-relaxed ${isMobile
         ? "text-xs mb-4 flex-1"
         : "text-xs sm:text-sm md:text-xs lg:text-sm flex-1"
-        }`}>
+        }`}
+      >
         {description}
-      </p>
+      </motion.p>
       {/* Dots Indicator - Only for mobile */}
       {isMobile && currentIndex !== undefined && totalCards && onDotClick && (
         <div className="flex justify-center gap-2 mt-auto pt-2">

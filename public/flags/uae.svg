@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <clipPath id="circleClip">
+    <circle cx="50" cy="50" r="50"/>
+  </clipPath>
+  <g clip-path="url(#circleClip)">
+    <!-- Red vertical band -->
+    <rect x="0" y="0" width="25" height="100" fill="#CE1126"/>
+    <!-- Green horizontal band -->
+    <rect x="25" y="0" width="75" height="33.33" fill="#00732F"/>
+    <!-- White horizontal band -->
+    <rect x="25" y="33.33" width="75" height="33.33" fill="#FFFFFF"/>
+    <!-- Black horizontal band -->
+    <rect x="25" y="66.66" width="75" height="33.34" fill="#000000"/>
+  </g>
+</svg>
