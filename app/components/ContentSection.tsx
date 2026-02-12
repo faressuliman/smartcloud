@@ -142,7 +142,7 @@ export default function ContentSection() {
                       size={22}
                       className={`transition-colors duration-300 ${isActive ? "text-white" : "text-slate-500"}`}
                     />
-                    <span className={`text-[10px] sm:text-xs font-semibold mt-0.5 transition-colors duration-300 ${isActive ? "text-white" : "text-slate-600"}`}>
+                    <span className={`text-[10px] sm:text-xs font-semibold mt-0.5 transition-colors duration-300 ${isActive ? "text-white" : "text-slate-700"}`}>
                       {section.name}
                     </span>
                   </div>

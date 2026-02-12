@@ -11,7 +11,7 @@ export default function LoadingScreen() {
     // Preload logo image immediately
     if (typeof window !== "undefined") {
       const img = document.createElement("img");
-      img.src = "/common/logo.png";
+      img.src = "/hero/smartcloud.png";
       (img as HTMLImageElement).fetchPriority = "high";
     }
 

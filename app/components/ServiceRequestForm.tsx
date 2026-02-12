@@ -239,8 +239,10 @@ export default function ServiceRequestForm() {
 
             {/* Service Category */}
             <div>
+              <label htmlFor="serviceCategory" className="block mb-2 text-sm font-medium text-[#1e3a5f]">Service Category</label>
               <div className="relative">
                 <select
+                  id="serviceCategory"
                   name="serviceCategory"
                   value={formData.serviceCategory}
                   onChange={handleChange}
