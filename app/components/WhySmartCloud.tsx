@@ -25,7 +25,7 @@ export default function WhySmartCloud() {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.3 }}
-            className="w-full px-4 lg:px-0 mt-16 sm:mt-24 mb-16 pb-16 border-b border-slate-200/60 flex flex-col items-center"
+            className="w-full px-4 lg:px-0 flex flex-col items-center pb-12 md:pb-16 lg:pb-20"
         >
             <div className="flex items-center gap-4 mb-8 px-2 sm:px-0">
                 <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">

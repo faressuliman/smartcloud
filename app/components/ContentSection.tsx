@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import SectionIndicator from "./SectionIndicator";
+import SectionIndicator from "./ui/SectionIndicator";
 import HomeSection from "./HomeSection";
 import AboutSection from "./AboutSection";
 import ServicesSection from "./ServicesSection";
@@ -91,16 +91,8 @@ export default function ContentSection() {
 
   return (
     <>
-      <section ref={sectionRef} className="relative flex flex-col justify-start bg-white pt-0 pb-24 md:pt-0 md:pb-12 lg:py-12 h-auto overflow-x-hidden" style={{ zIndex: 1 }}>
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 z-0"
-          style={{
-            backgroundImage: "url(/common/cloud-bg.png)",
-          }}
-        />
-
-        <div className="hidden lg:block absolute right-4 z-50 lg:right-6" style={{ top: "50vh", transform: "translateY(-50%)" }}>
+      <section ref={sectionRef} className="relative flex flex-col justify-start bg-slate-200 pt-0 pb-24 md:pt-0 md:pb-12 lg:py-12 h-auto overflow-x-hidden" style={{ zIndex: 1 }}>
+        <div className="hidden lg:block absolute right-4 z-50 lg:right-6" style={{ top: "75vh", transform: "translateY(-50%)" }}>
           <SectionIndicator activeSection={activeSection} onSectionChange={navigateToSection} />
         </div>
 
@@ -124,7 +116,7 @@ export default function ContentSection() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="w-full bg-white border-t border-slate-200 shadow-[0_-8px_30px_rgba(0,0,0,0.15)]">
-          <div className="flex w-full items-center justify-around px-2 py-3 pb-[max(16px,env(safe-area-inset-bottom,16px))]">
+          <div className="flex w-full items-center justify-around px-2 py-2 pb-[max(16px,env(safe-area-inset-bottom,16px))]">
             {navItems.map((section, index) => {
               const Icon = section.icon;
               const isActive = activeSection === index;

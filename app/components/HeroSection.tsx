@@ -27,12 +27,12 @@ export default function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden py-12 sm:py-16 md:py-20 lg:py-0 lg:h-screen"
     >
       {/* Header with Logo */}
-      <div className="absolute top-0 left-0 right-0 z-40 bg-linear-to-b from-slate-900/90 via-slate-900/50 to-transparent py-12 px-4 sm:px-8 lg:px-12">
+      <div className="absolute top-0 left-0 right-0 z-40 bg-linear-to-b from-slate-900/90 via-slate-900/50 to-transparent pt-6 py-12 px-4 sm:px-8 lg:px-12">
         <div className="w-full flex items-center justify-start">
           <Image
             src="/hero/smartcloud.png"
             alt="Smart Cloud Logo"
-            width={80}
+            width={64}
             height={60}
             className="h-auto w-auto max-w-20 sm:max-w-24 md:max-w-28"
             priority
@@ -77,12 +77,12 @@ export default function HeroSection() {
       </div>
 
       {/* Content Container - Left-aligned with padding */}
-      <div className="relative z-10 flex w-full flex-col gap-8 px-4 sm:gap-10 sm:px-8 lg:flex-row lg:items-center lg:gap-32 lg:px-12">
+      <div className="relative z-10 flex w-full flex-col gap-8 px-4 sm:gap-10 sm:px-8 xl:flex-row xl:items-center xl:gap-32 xl:px-12">
         {/* Left Side - Text Content */}
         <div className="w-full max-w-full sm:max-w-2xl mx-auto sm:mx-0 lg:text-left">
           {/* Mobile text */}
           <motion.div 
-            className="block lg:hidden space-y-3"
+            className="block xl:hidden space-y-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -90,7 +90,7 @@ export default function HeroSection() {
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
               className="text-xl sm:text-2xl font-bold text-white leading-tight"
             >
               Delivering Intelligent Technology Solutions
@@ -98,7 +98,7 @@ export default function HeroSection() {
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
               className="text-white/90 text-sm sm:text-base"
             >
               We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
@@ -106,7 +106,7 @@ export default function HeroSection() {
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
               className="text-white/90 text-sm sm:text-base"
             >
               Operating in Saudi Arabia, UAE and Egypt
@@ -114,7 +114,7 @@ export default function HeroSection() {
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.8, delay: 1.1 }}
               className="font-semibold text-primary text-sm sm:text-base"
             >
               Choose your country to continue
@@ -123,7 +123,7 @@ export default function HeroSection() {
 
           {/* Desktop text */}
           <motion.div 
-            className="hidden lg:block"
+            className="hidden xl:block"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -131,7 +131,7 @@ export default function HeroSection() {
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
               className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5 md:mb-6 leading-tight"
             >
               Delivering Intelligent Technology Solutions
@@ -140,7 +140,7 @@ export default function HeroSection() {
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
               className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-5 sm:mb-6 md:mb-7"
             >
               We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
@@ -149,13 +149,13 @@ export default function HeroSection() {
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              transition={{ duration: 0.6, delay: 1.0 }}
               className="space-y-2 sm:space-y-2.5"
             >
               <motion.p 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
+                transition={{ duration: 0.8, delay: 1.1 }}
                 className="text-primary text-base sm:text-lg md:text-xl lg:text-xl font-semibold"
               >
                 Three Regional Offices: Saudi Arabia, UAE and Egypt
@@ -163,7 +163,7 @@ export default function HeroSection() {
               <motion.p 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
+                transition={{ duration: 0.8, delay: 1.2 }}
                 className="text-white/70 text-sm sm:text-base md:text-base"
               >
                 Select your regional office to explore location-specific services and <br /> connect with our local team.
@@ -173,7 +173,7 @@ export default function HeroSection() {
         </div>
 
         {/* Mobile Section - Flag Buttons with Dotted Line */}
-        <div className="w-full lg:hidden flex">
+        <div className="w-full xl:hidden flex">
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Saudi Arabia Button */}
             <button
@@ -255,10 +255,10 @@ export default function HeroSection() {
         </div>
 
         {/* Spacer for Desktop to push map to right */}
-        <div className="hidden lg:block lg:flex-1" />
+        <div className="hidden xl:block xl:flex-1" />
 
         {/* Desktop Section - Interactive Regional Branch Selector */}
-        <div className="hidden lg:block w-full lg:w-125 relative z-20">
+        <div className="hidden xl:block w-full xl:w-125 relative z-20">
           {/* Glassmorphism Container */}
           <div className="relative">
             {/* Container Shadow Layer */}

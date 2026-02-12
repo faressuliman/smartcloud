@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowDownRight } from "lucide-react";
-import PortfolioCard from "./PortfolioCard";
+import PortfolioCard from "./ui/PortfolioCard";
 import { portfolio } from "../data/contentData";
 
 export default function PortfolioSection() {
@@ -11,22 +11,22 @@ export default function PortfolioSection() {
 
   const currentPortfolio = portfolio[currentIndex];
 
-  const nextPortfolio = () => {
+  const nextPortfolio = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % portfolio.length);
-  };
+  }, []);
 
-  const prevPortfolio = () => {
+  const prevPortfolio = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + portfolio.length) % portfolio.length);
-  };
+  }, []);
 
-  const goToPortfolio = (index: number) => {
+  const goToPortfolio = useCallback((index: number) => {
     setCurrentIndex(index);
-  };
+  }, []);
 
   return (
-    <div className="mx-auto max-w-6xl w-full">
+    <div className="mx-auto max-w-6xl w-full pb-12 md:pb-16 lg:pb-20">
         <motion.div
-          className="mb-8 pb-8 lg:pb-14 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
+          className="mb-8 pb-4 lg:pb-8 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
@@ -96,7 +96,7 @@ export default function PortfolioSection() {
                 className={`transition-all duration-300 rounded-full cursor-pointer ${
                   idx === currentIndex
                     ? "bg-primary w-8 h-2.5"
-                    : "bg-slate-300 w-2.5 h-2.5 hover:bg-slate-400"
+                    : "bg-white w-2.5 h-2.5 hover:bg-slate-100"
                 }`}
                 aria-label={`Go to portfolio ${idx + 1}`}
               />

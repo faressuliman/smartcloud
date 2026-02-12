@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { ArrowDownRight, ArrowRight } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import HomeFeatureCard from "./HomeFeatureCard";
+import { useState, useRef, useEffect, useCallback } from "react";
+import HomeFeatureCard from "./ui/HomeFeatureCard";
 import WhySmartCloud from "./WhySmartCloud";
 import { homeFeatures, sliderConfig } from "../data/contentData";
 
@@ -32,7 +32,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
         };
     }, []);
 
-    const handleHomeCardChange = (index: number) => {
+    const handleHomeCardChange = useCallback((index: number) => {
         setHomeCardIndex(index);
         if (homeCardIntervalRef.current) {
             clearInterval(homeCardIntervalRef.current);
@@ -40,21 +40,21 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
         homeCardIntervalRef.current = setInterval(() => {
             setHomeCardIndex((current) => (current + 1) % 6);
         }, sliderConfig.homeCardsAutoPlayInterval);
-    };
+    }, []);
 
-    const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX);
-    const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
-    const handleTouchEnd = () => {
+    const handleTouchStart = useCallback((e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX), []);
+    const handleTouchMove = useCallback((e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX), []);
+    const handleTouchEnd = useCallback(() => {
         if (!touchStart || !touchEnd) return;
         const distance = touchStart - touchEnd;
         if (distance > 50) handleHomeCardChange((homeCardIndex + 1) % 6);
         if (distance < -50) handleHomeCardChange((homeCardIndex - 1 + 6) % 6);
-    };
+    }, [touchStart, touchEnd, homeCardIndex, handleHomeCardChange]);
 
     return (
         <div className="mx-auto max-w-6xl w-full">
             <motion.div
-                className="mb-8 pb-8 lg:pb-14 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
+                className="mb-4 pb-12 sm:pb-16 md:pb-20 lg:pb-24 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.35 }}
@@ -87,13 +87,14 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.4 }}
+                className="pb-12 sm:pb-16 md:pb-20 lg:pb-24"
             >
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="mb-2 pb-2 border-b border-slate-200/60 px-4 md:px-4 lg:px-0 flex items-center gap-4"
+                    className="pb-4 border-b border-slate-200/60 px-4 md:px-4 lg:px-0 flex items-center gap-4"
                 >
                     <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
                         What We Can Do For You

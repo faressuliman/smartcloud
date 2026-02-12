@@ -18,7 +18,8 @@ import {
     MonitorDown,
     ClipboardMinus,
     Cpu,
-    ShieldCheck
+    ShieldCheck,
+    Handshake
 } from "lucide-react";
 
 import {
@@ -116,7 +117,7 @@ export const homeFeatures = [
         desc: "The possibility of linking all the techniques and presented to the client as an integrated system and one controller screen!"
     },
     {
-        icon: ShieldCheck,
+        icon: Handshake,
         alt: "After-Sales Services",
         title: "After-Sales Services",
         desc: "Comprehensive support and maintenance services to ensure your systems continue operating at peak performance long after installation."

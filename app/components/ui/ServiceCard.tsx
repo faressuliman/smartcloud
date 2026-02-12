@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { memo } from "react";
+import RequestServiceButton from "./RequestServiceButton";
 
 interface ServiceCardProps {
   service: {
@@ -18,7 +20,7 @@ interface ServiceCardProps {
   onNext: () => void;
 }
 
-export default function ServiceCard({ service, currentIndex, onPrev, onNext }: ServiceCardProps) {
+const ServiceCard = memo(function ServiceCard({ service, currentIndex, onPrev, onNext }: ServiceCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -120,14 +122,7 @@ export default function ServiceCard({ service, currentIndex, onPrev, onNext }: S
             </motion.div>
 
             {/* Request Service Button */}
-            <motion.button 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1 }}
-              className="w-full rounded-xl py-3.5 font-semibold text-white transition-all duration-300 bg-primary hover:bg-primary-dark cursor-pointer"
-            >
-              Request Service
-            </motion.button>
+            <RequestServiceButton variant="mobile" delay={1} />
           </motion.div>
         </div>
       </div>
@@ -218,14 +213,7 @@ export default function ServiceCard({ service, currentIndex, onPrev, onNext }: S
           </motion.div>
 
           {/* Request Service Button */}
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1 }}
-            className="w-full rounded-xl py-4 font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] bg-primary hover:bg-primary-dark cursor-pointer"
-          >
-            Request Service
-          </motion.button>
+          <RequestServiceButton variant="desktop" delay={1} />
         </div>
 
         {/* Right Navigation Arrow - hidden on mobile, visible on desktop */}
@@ -238,4 +226,6 @@ export default function ServiceCard({ service, currentIndex, onPrev, onNext }: S
       </div>
     </motion.div>
   );
-}
+});
+
+export default ServiceCard;

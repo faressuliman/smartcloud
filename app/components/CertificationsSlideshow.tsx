@@ -64,7 +64,7 @@ export default function CertificationsSlideshow() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8 }}
-      className="w-full mt-12 sm:mt-16 pb-14 mb-14 border-b border-slate-200/60"
+      className="w-full pb-12 md:pb-16 lg:pb-20"
     >
       <div className="w-full px-4 sm:px-8 lg:px-12 mb-4 sm:mb-8">
         <div className="flex items-center justify-between">

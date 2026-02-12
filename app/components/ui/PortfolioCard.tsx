@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { memo } from "react";
 
 interface PortfolioCardProps {
   portfolio: {
@@ -18,7 +19,7 @@ interface PortfolioCardProps {
   onNext: () => void;
 }
 
-export default function PortfolioCard({ portfolio, currentIndex, onPrev, onNext }: PortfolioCardProps) {
+const PortfolioCard = memo(function PortfolioCard({ portfolio, currentIndex, onPrev, onNext }: PortfolioCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -224,4 +225,6 @@ export default function PortfolioCard({ portfolio, currentIndex, onPrev, onNext 
       </div>
     </motion.div>
   );
-}
+});
+
+export default PortfolioCard;

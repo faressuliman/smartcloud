@@ -18,6 +18,29 @@ export default function PartnersSlider() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Preload first slide partner images
+  useEffect(() => {
+    const preloadPartnerImages = async () => {
+      try {
+        const firstSlideImages = partnerLogos.slice(0, 7); // First slide logos
+        await Promise.all(
+          firstSlideImages.map((partner) => {
+            return new Promise((resolve) => {
+              const img = document.createElement('img');
+              img.onload = resolve;
+              img.onerror = resolve; // Don't fail if image fails, just continue
+              img.src = partner.src;
+            });
+          })
+        );
+      } catch (error) {
+        console.error('Error preloading partner images:', error);
+      }
+    };
+
+    preloadPartnerImages();
+  }, []);
+
   const getLogosPerSlide = () => {
     if (windowWidth < 640) return 3;
     if (windowWidth < 1024) return 4;
@@ -55,13 +78,12 @@ export default function PartnersSlider() {
   const handleNextSlide = () => {
     stopAutoPlay();
     setCurrentSlide((prev) => (prev + 1) % slides.length);
-    startAutoPlay();
   };
 
   return (
     <div className="w-full bg-white pt-6 pb-9 shadow-4xl">
       <motion.div
-        className="w-full px-4 sm:px-8 lg:px-12 mb"
+        className="w-full px-4 sm:px-8 lg:px-12 mb-6"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.35 }}
@@ -124,13 +146,15 @@ export default function PartnersSlider() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="relative w-full h-24 lg:h-32 rounded-xl overflow-hidden bg-white transition-all"
+              className="relative w-full h-24 lg:h-32 rounded-xl overflow-hidden bg-white transition-all border border-gray-100"
             >
               <Image
                 src={partner.src}
                 alt={`Partner ${partner.id}`}
                 fill
                 className="object-contain p-3 lg:p-4 hover:scale-105 transition-transform duration-300"
+                priority={currentSlide === 0 && index < 3}
+                fetchPriority={currentSlide === 0 ? "high" : "auto"}
               />
             </motion.div>
           ))}

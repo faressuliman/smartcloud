@@ -50,3 +50,25 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Hero section landscape mobile optimization */
+@media (orientation: landscape) and (max-height: 650px) {
+  section#home {
+    min-height: 100vh !important;
+    height: auto !important;
+    padding-top: 140px !important;
+    padding-bottom: 40px !important;
+  }
+
+  /* Ensure logo header stays fixed at top */
+  section#home > div:first-child {
+    position: absolute !important;
+    top: 0 !important;
+    z-index: 50 !important;
+  }
+
+  /* Add extra top padding to content for landscape mode */
+  section#home > div:nth-child(3) {
+    padding-top: 40px !important;
+  }
+}

@@ -10,7 +10,7 @@ export default function AboutSection() {
     return (
         <div className="mx-auto max-w-6xl w-full">
             <motion.div
-                className="mb-8 pb-8 lg:pb-14 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
+                className="mb-4 pb-12 sm:pb-16 md:pb-20 lg:pb-24 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.35 }}
@@ -39,7 +39,7 @@ export default function AboutSection() {
                 </motion.div>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start pb-12 sm:pb-16 md:pb-20 lg:pb-24">
                 <motion.div
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}

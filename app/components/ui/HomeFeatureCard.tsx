@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
+import { memo } from "react";
 
 interface HomeFeatureCardProps {
   icon: LucideIcon;
@@ -14,7 +15,7 @@ interface HomeFeatureCardProps {
   onDotClick?: (index: number) => void;
 }
 
-export default function HomeFeatureCard({
+const HomeFeatureCard = memo(function HomeFeatureCard({
   icon: Icon,
   title,
   description,
@@ -92,4 +93,6 @@ export default function HomeFeatureCard({
       {cardContent}
     </motion.div>
   );
-}
+});
+
+export default HomeFeatureCard;
