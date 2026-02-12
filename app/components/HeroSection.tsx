@@ -1,12 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import InteractiveMap from "./InteractiveMap";
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false);
 
   const handleUaeClick = () => {
     window.open("https://turbotechnikmt.com", "_blank", "noopener,noreferrer");
@@ -20,6 +21,22 @@ export default function HeroSection() {
     // Add Egypt company link here when available
     console.log("Egypt clicked");
   };
+
+  useEffect(() => {
+    const handleLoadingComplete = () => {
+      setIsLoadingComplete(true);
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("loadingComplete", handleLoadingComplete);
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("loadingComplete", handleLoadingComplete);
+      }
+    };
+  }, []);
 
   return (
     <section
@@ -84,37 +101,37 @@ export default function HeroSection() {
           <motion.div 
             className="block xl:hidden space-y-3"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={isLoadingComplete ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6 }}
           >
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
+              animate={isLoadingComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               className="text-xl sm:text-2xl font-bold text-white leading-tight"
             >
               Delivering Intelligent Technology Solutions
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
+              animate={isLoadingComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
               className="text-white/90 text-sm sm:text-base"
             >
               We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
             </motion.p>
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 1.0 }}
+              animate={isLoadingComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
               className="text-white/90 text-sm sm:text-base"
             >
               Operating in Saudi Arabia, UAE and Egypt
             </motion.p>
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 1.1 }}
+              animate={isLoadingComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
               className="font-semibold text-primary text-sm sm:text-base"
             >
               Choose your country to continue
@@ -125,13 +142,13 @@ export default function HeroSection() {
           <motion.div 
             className="hidden xl:block"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={isLoadingComplete ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6 }}
           >
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
+              animate={isLoadingComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5 md:mb-6 leading-tight"
             >
               Delivering Intelligent Technology Solutions
@@ -139,8 +156,8 @@ export default function HeroSection() {
 
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
+              animate={isLoadingComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
               className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-5 sm:mb-6 md:mb-7"
             >
               We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
@@ -148,22 +165,22 @@ export default function HeroSection() {
 
             <motion.div 
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 1.0 }}
+              animate={isLoadingComplete ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
               className="space-y-2 sm:space-y-2.5"
             >
               <motion.p 
                 initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 1.1 }}
+                animate={isLoadingComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
                 className="text-primary text-base sm:text-lg md:text-xl lg:text-xl font-semibold"
               >
                 Three Regional Offices: Saudi Arabia, UAE and Egypt
               </motion.p>
               <motion.p 
                 initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 1.2 }}
+                animate={isLoadingComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
                 className="text-white/70 text-sm sm:text-base md:text-base"
               >
                 Select your regional office to explore location-specific services and <br /> connect with our local team.
@@ -265,7 +282,12 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-linear-to-br from-slate-950/40 via-slate-900/30 to-slate-950/40 rounded-xl sm:rounded-2xl blur-xl transform translate-y-2 translate-x-1 scale-95" />
 
             {/* Main Container */}
-            <div className="relative bg-linear-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-6 border border-slate-700/50 shadow-2xl">
+            <motion.div 
+              className="relative bg-linear-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-6 border border-slate-700/50 shadow-2xl"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={isLoadingComplete ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+            >
               {/* Inner Glow Accents */}
               <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-linear-to-br from-secondary/10 via-transparent to-primary/10 pointer-events-none" />
               <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-secondary/50 to-transparent rounded-t-xl sm:rounded-t-2xl" />
@@ -296,7 +318,7 @@ export default function HeroSection() {
                   <span>Click a location pin to explore services</span>
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

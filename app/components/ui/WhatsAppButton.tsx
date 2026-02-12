@@ -96,7 +96,7 @@ const WhatsAppButton = memo(function WhatsAppButton() {
       aria-label="Contact us on WhatsApp"
       className="fixed left-4 z-[9999] flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-green-600 shadow-lg transition-all hover:shadow-xl sm:left-6 sm:h-14 sm:w-14 cursor-pointer"
       style={{
-        bottom: isNavVisible ? "100px" : "24px",
+        bottom: isMobile ? "84px" : (isNavVisible ? "100px" : "24px"),
       }}
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
