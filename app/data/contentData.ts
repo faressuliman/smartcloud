@@ -57,7 +57,7 @@ export const sliderConfig = {
     partnersAutoPlayInterval: 3000,
     certificationsAutoPlayInterval: 5000,
     homeCardsAutoPlayInterval: 5000,
-    whySmartCloudAutoPlayInterval: 6000,
+    whySmartCloudAutoPlayInterval: 3500,
     partnersPerSlide: 7,
     certificationsPerSlide: 5,
 };

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { whySmartCloudData, sliderConfig } from "../data/contentData";
-import { Zap } from "lucide-react";
+import { Award } from "lucide-react";
 
 export default function WhySmartCloud() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -27,7 +27,7 @@ export default function WhySmartCloud() {
             viewport={{ once: true, amount: 0.3 }}
             className="w-full px-4 lg:px-0 flex flex-col items-center pb-6 md:pb-10 lg:pb-16"
         >
-            <div className="flex items-center gap-4 mb-4 px-2 sm:px-0">
+            <div className="flex items-center gap-4 mb-4 lg:mb-8 px-2 sm:px-0">
                 <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
                     Why Choose Smart Cloud?
                 </h2>
@@ -38,7 +38,7 @@ export default function WhySmartCloud() {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl" />
 
                     <div className="relative z-10 flex flex-col items-center gap-6">
-                        <div className="relative w-24 h-24 flex items-center justify-center">
+                        <div className="relative w-[4.5rem] h-[4.5rem] flex items-center justify-center">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={`icon-${currentIndex}`}
@@ -48,7 +48,7 @@ export default function WhySmartCloud() {
                                     transition={{ duration: 0.6, ease: "backOut" }}
                                     className="absolute inset-0 flex items-center justify-center bg-white/25 rounded-full text-white"
                                 >
-                                    <IconComponent size={48} strokeWidth={1.5} />
+                                    <IconComponent size={40} strokeWidth={1.5} />
                                 </motion.div>
                             </AnimatePresence>
                         </div>
@@ -97,14 +97,11 @@ export default function WhySmartCloud() {
                 <motion.div
                     className="flex-1 bg-white p-8 md:p-10 relative overflow-hidden min-h-55 flex flex-col justify-center items-center text-center group"
                 >
-                    <div className="absolute inset-0 bg-cover bg-center opacity-5 group-hover:opacity-10 transition-opacity duration-500"
-                        style={{ backgroundImage: "url(/about/smart-building-automation.jpg)" }} />
-
                     <div className="absolute inset-0 bg-linear-to-br from-white/90 to-transparent" />
 
                     <div className="relative z-10 flex flex-col items-center gap-4">
                         <div className="bg-secondary/10 p-4 rounded-full mb-2 group-hover:bg-secondary/20 transition-colors duration-300">
-                            <Zap className="w-10 h-10 text-secondary" />
+                            <Award className="w-10 h-10 text-secondary" />
                         </div>
 
                         <motion.div 
