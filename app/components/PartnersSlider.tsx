@@ -81,7 +81,7 @@ export default function PartnersSlider() {
   };
 
   return (
-    <div className="w-full bg-white pt-6 pb-9 shadow-4xl">
+    <div id="partners" className="w-full bg-white pt-6 pb-9 shadow-4xl">
       <motion.div
         className="w-full px-4 sm:px-8 lg:px-12 mb-6"
         initial={{ opacity: 0, y: 30 }}

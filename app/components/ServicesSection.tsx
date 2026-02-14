@@ -24,7 +24,7 @@ export default function ServicesSection() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-6xl w-full pb-12 md:pb-16 lg:pb-20">
+    <div className="mx-auto max-w-6xl w-full pb-6 md:pb-10 lg:pb-16">
         <motion.div
           className="mb-8 pb-4 lg:pb-8 border-b border-slate-200/60 px-2 md:px-4 lg:px-0 lg:mx-auto lg:max-w-6xl flex flex-col items-center gap-4 md:gap-6"
           initial={{ opacity: 0, y: 30 }}
@@ -89,8 +89,8 @@ export default function ServicesSection() {
                 onClick={() => goToService(idx)}
                 className={`transition-all duration-300 rounded-full cursor-pointer ${
                   idx === currentIndex
-                    ? 'bg-primary w-8 h-2.5'
-                    : 'bg-white w-2.5 h-2.5 hover:bg-slate-100'
+                    ? 'bg-primary w-6 h-2 sm:w-7 sm:h-2.5 lg:w-8'
+                    : 'bg-white w-2 h-2 sm:w-2.5 sm:h-2.5 hover:bg-slate-100'
                 }`}
                 aria-label={`Go to service ${idx + 1}`}
               />

@@ -91,7 +91,7 @@ export default function ContentSection() {
 
   return (
     <>
-      <section ref={sectionRef} className="relative flex flex-col justify-start bg-slate-200 pt-0 pb-24 md:pt-0 md:pb-12 lg:py-12 h-auto overflow-x-hidden" style={{ zIndex: 1 }}>
+      <section ref={sectionRef} className="relative flex flex-col justify-start bg-slate-200 pt-0 pb-8 md:pt-0 md:pb-8 lg:py-8 h-auto overflow-x-hidden" style={{ zIndex: 1 }}>
         <div className="hidden lg:block absolute right-4 z-50 lg:right-6" style={{ top: "75vh", transform: "translateY(-50%)" }}>
           <SectionIndicator activeSection={activeSection} onSectionChange={navigateToSection} />
         </div>

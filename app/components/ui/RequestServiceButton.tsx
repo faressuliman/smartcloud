@@ -27,9 +27,10 @@ const RequestServiceButton = memo(function RequestServiceButton({
     }, 100);
   }, []);
 
-  const baseClasses = "w-full rounded-xl font-semibold text-white transition-all duration-300 bg-primary cursor-pointer";
-  const mobileClasses = variant === "mobile" ? "py-3.5 hover:bg-primary-dark" : "";
-  const desktopClasses = variant === "desktop" ? "py-4 hover:scale-[1.02] active:scale-[0.98] hover:bg-primary-dark" : "";
+  const baseClasses = "w-full rounded-xl font-semibold text-white transition-all duration-300 bg-primary cursor-pointer flex items-center justify-center";
+  const textSizeClasses = "text-sm sm:text-base lg:text-lg";
+  const mobileClasses = variant === "mobile" ? "py-3 sm:py-3.5 hover:bg-primary-dark" : "";
+  const desktopClasses = variant === "desktop" ? "py-3 sm:py-3.5 lg:py-4 hover:scale-[1.02] active:scale-[0.98] hover:bg-primary-dark" : "";
 
   return (
     <motion.button
@@ -37,7 +38,7 @@ const RequestServiceButton = memo(function RequestServiceButton({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
       onClick={scrollToContact}
-      className={`${baseClasses} ${mobileClasses} ${desktopClasses} ${className}`}
+      className={`${baseClasses} ${textSizeClasses} ${mobileClasses} ${desktopClasses} ${className}`}
     >
       Request Service
     </motion.button>

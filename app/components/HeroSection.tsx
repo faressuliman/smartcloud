@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import { Globe } from "lucide-react";
 import InteractiveMap from "./InteractiveMap";
 
 export default function HeroSection() {
@@ -14,7 +15,10 @@ export default function HeroSection() {
   };
 
   const handleSaudiClick = () => {
-    window.dispatchEvent(new CustomEvent("showHome"));
+    const partnersElement = document.getElementById("partners");
+    if (partnersElement) {
+      partnersElement.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const handleEgyptClick = () => {
@@ -45,7 +49,7 @@ export default function HeroSection() {
     >
       {/* Header with Logo */}
       <div className="absolute top-0 left-0 right-0 z-40 bg-linear-to-b from-slate-900/90 via-slate-900/50 to-transparent pt-6 py-12 px-4 sm:px-8 lg:px-12">
-        <div className="w-full flex items-center justify-start">
+        <div className="w-full flex items-center justify-between">
           <Image
             src="/hero/smartcloud.png"
             alt="Smart Cloud Logo"
@@ -54,6 +58,10 @@ export default function HeroSection() {
             className="h-auto w-auto max-w-20 sm:max-w-24 md:max-w-28"
             priority
           />
+          <button className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm md:px-6 md:py-2.5 md:text-base font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:scale-105 cursor-pointer">
+            <span>العربية</span>
+            <Globe className="h-4 w-4 md:h-5 md:w-5 text-secondary" />
+          </button>
         </div>
       </div>
       {/* Background Video - Always running */}
@@ -275,7 +283,7 @@ export default function HeroSection() {
         <div className="hidden xl:block xl:flex-1" />
 
         {/* Desktop Section - Interactive Regional Branch Selector */}
-        <div className="hidden xl:block w-full xl:w-125 relative z-20">
+        <div className="hidden xl:block w-full xl:w-125 relative z-20 mt-15">
           {/* Glassmorphism Container */}
           <div className="relative">
             {/* Container Shadow Layer */}

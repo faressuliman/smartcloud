@@ -112,7 +112,7 @@ const ServiceCard = memo(function ServiceCard({ service, currentIndex, onPrev, o
                     transition={{ duration: 0.5, delay: 0.6 + idx * 0.1 }}
                     className="flex items-start gap-3"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full mt-2 shrink-0 bg-primary" />
+                    <div className="w-1.5 h-1.5 rounded-full mt-2 shrink-0 bg-secondary" />
                     <p className="text-white/80 text-sm leading-relaxed">
                       {feature}
                     </p>

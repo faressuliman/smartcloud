@@ -52,10 +52,9 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
             return;
         }
 
-        window.dispatchEvent(new CustomEvent("showHome"));
-        const contentSection = document.getElementById("home");
-        if (contentSection) {
-            contentSection.scrollIntoView({ behavior: "smooth" });
+        const partnersElement = document.getElementById("partners");
+        if (partnersElement) {
+            partnersElement.scrollIntoView({ behavior: "smooth" });
         }
     };
 
