@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  --font-cairo: var(--font-cairo);
   --color-primary: #E5B838;
   --color-primary-dark: #d4a732;
   --color-primary-light: #f0c85a;

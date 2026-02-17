@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { useCallback, memo } from "react";
+import { useLanguage } from "../../context/LanguageContext";
+import { content } from "../../data/contentData";
 
 interface RequestServiceButtonProps {
   className?: string;
@@ -14,6 +16,9 @@ const RequestServiceButton = memo(function RequestServiceButton({
   variant = "desktop",
   delay = 1 
 }: RequestServiceButtonProps) {
+  const { language } = useLanguage();
+  const { common } = content[language];
+
   const scrollToContact = useCallback(() => {
     // Dispatch event to switch to service tab
     window.dispatchEvent(new CustomEvent('switchToServiceTab'));
@@ -40,7 +45,7 @@ const RequestServiceButton = memo(function RequestServiceButton({
       onClick={scrollToContact}
       className={`${baseClasses} ${textSizeClasses} ${mobileClasses} ${desktopClasses} ${className}`}
     >
-      Request Service
+      {common.requestService}
     </motion.button>
   );
 });

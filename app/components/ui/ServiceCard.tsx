@@ -18,9 +18,13 @@ interface ServiceCardProps {
   currentIndex: number;
   onPrev: () => void;
   onNext: () => void;
+  language?: string;
 }
 
-const ServiceCard = memo(function ServiceCard({ service, currentIndex, onPrev, onNext }: ServiceCardProps) {
+const ServiceCard = memo(function ServiceCard({ service, currentIndex, onPrev, onNext, language = 'en' }: ServiceCardProps) {
+  const isRTL = language === 'ar';
+  const handleLeftClick = isRTL ? onNext : onPrev;
+  const handleRightClick = isRTL ? onPrev : onNext;
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -45,9 +49,9 @@ const ServiceCard = memo(function ServiceCard({ service, currentIndex, onPrev, o
         {/* Content Overlay */}
         <div className="relative z-10 h-full flex flex-col px-6 py-8">
           {/* Title with Navigation Arrows */}
-          <div className="flex items-center justify-between gap-4 mb-8">
+          <div dir="ltr" className="flex items-center justify-between gap-4 mb-8">
             <button
-              onClick={onPrev}
+              onClick={handleLeftClick}
               className="text-white/80 hover:text-white transition-colors shrink-0 cursor-pointer"
             >
               <ArrowLeft className="w-6 h-6" />
@@ -63,7 +67,7 @@ const ServiceCard = memo(function ServiceCard({ service, currentIndex, onPrev, o
             </motion.h3>
 
             <button
-              onClick={onNext}
+              onClick={handleRightClick}
               className="text-white/80 hover:text-white transition-colors shrink-0 cursor-pointer"
             >
               <ArrowRight className="w-6 h-6" />
@@ -215,15 +219,23 @@ const ServiceCard = memo(function ServiceCard({ service, currentIndex, onPrev, o
           {/* Request Service Button */}
           <RequestServiceButton variant="desktop" delay={1} />
         </div>
-
-        {/* Right Navigation Arrow - hidden on mobile, visible on desktop */}
-        <button
-          onClick={onNext}
-          className="hidden lg:flex absolute right-4 sm:right-5 lg:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-primary shadow-lg items-center justify-center text-white hover:bg-primary-dark transition-all duration-300 hover:scale-110 cursor-pointer"
-        >
-          <ArrowRight className="w-4 h-4" />
-        </button>
       </div>
+
+      {/* Left Navigation Arrow - hidden on mobile, visible on desktop */}
+      <button
+        onClick={handleLeftClick}
+        className="hidden lg:flex absolute left-4 sm:left-5 lg:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-primary shadow-lg items-center justify-center text-white hover:bg-primary-dark transition-all duration-300 hover:scale-110 cursor-pointer"
+      >
+        <ArrowLeft className="w-4 h-4" />
+      </button>
+
+      {/* Right Navigation Arrow - hidden on mobile, visible on desktop */}
+      <button
+        onClick={handleRightClick}
+        className="hidden lg:flex absolute right-4 sm:right-5 lg:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-primary shadow-lg items-center justify-center text-white hover:bg-primary-dark transition-all duration-300 hover:scale-110 cursor-pointer"
+      >
+        <ArrowRight className="w-4 h-4" />
+      </button>
     </motion.div>
   );
 });

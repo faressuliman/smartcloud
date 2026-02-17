@@ -2,22 +2,25 @@
 
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, ArrowDownRight } from "lucide-react";
+import { ArrowDownRight, ArrowDownLeft } from "lucide-react";
 import ServiceCard from "./ui/ServiceCard";
-import { services } from "../data/contentData";
+import { content } from "../data/contentData";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ServicesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { language } = useLanguage();
 
+  const services = content[language].services;
   const currentService = services[currentIndex];
 
   const nextService = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % services.length);
-  }, []);
+  }, [services.length]);
 
   const prevService = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + services.length) % services.length);
-  }, []);
+  }, [services.length]);
 
   const goToService = useCallback((index: number) => {
     setCurrentIndex(index);
@@ -34,16 +37,22 @@ export default function ServicesSection() {
         >
           <div className="flex items-center gap-4 px-2 sm:px-0">
             <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-              Our Services
+              {language === 'en' ? 'Our Services' : 'خدماتنا'}
             </h2>
-            <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            {language === 'en' ? (
+              <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            ) : (
+              <ArrowDownLeft className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            )}
           </div>
 
           <motion.div
             className="relative w-full bg-white/40 backdrop-blur-sm border-2 border-slate-200/50 rounded-3xl lg:rounded-4xl shadow-xl shadow-secondary/20 px-6 md:px-10 py-8 md:py-10"
           >
             <p className="text-sm lg:text-base text-slate-600 leading-relaxed text-start">
-              From smart mosque automation to cutting-edge IoT solutions, we deliver comprehensive technical services across six specialized domains. Each service is designed to enhance efficiency, reduce costs, and bring intelligent automation to your facilities.
+              {language === 'en'
+                ? 'From smart mosque automation to cutting-edge IoT solutions, we deliver comprehensive technical services across six specialized domains. Each service is designed to enhance efficiency, reduce costs, and bring intelligent automation to your facilities.'
+                : 'من أتمتة المساجد الذكية إلى حلول إنترنت الأشياء المتطورة، نقدم خدمات فنية شاملة عبر ستة مجالات متخصصة. تم تصميم كل خدمة لتعزيز الكفاءة وتقليل التكاليف وجلب الأتمتة الذكية لمرافقك.'}
             </p>
           </motion.div>
         </motion.div>
@@ -64,15 +73,9 @@ export default function ServicesSection() {
                   currentIndex={currentIndex}
                   onPrev={prevService}
                   onNext={nextService}
+                  language={language}
                 />
               </AnimatePresence>
-
-              <button
-                onClick={prevService}
-                className="hidden lg:flex absolute left-4 sm:left-5 lg:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-primary shadow-lg items-center justify-center text-white hover:bg-primary-dark transition-all duration-300 hover:scale-110 cursor-pointer"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </button>
             </div>
           </div>
 

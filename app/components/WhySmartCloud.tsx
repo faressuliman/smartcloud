@@ -2,21 +2,27 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { whySmartCloudData, sliderConfig } from "../data/contentData";
+import { sliderConfig, content } from "../data/contentData";
 import { Award } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function WhySmartCloud() {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const { language } = useLanguage();
+    
+    // Access localized content
+    const whySmartCloudContent = content[language].whySmartCloud;
+    const stats = whySmartCloudContent.stats;
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % whySmartCloudData.length);
+            setCurrentIndex((prev) => (prev + 1) % stats.length);
         }, sliderConfig.whySmartCloudAutoPlayInterval);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [stats.length]);
 
-    const currentStat = whySmartCloudData[currentIndex];
+    const currentStat = stats[currentIndex];
     const IconComponent = currentStat.icon;
 
     return (
@@ -29,7 +35,7 @@ export default function WhySmartCloud() {
         >
             <div className="flex items-center gap-4 mb-4 lg:mb-8 px-2 sm:px-0">
                 <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-                    Why Choose Smart Cloud?
+                    {whySmartCloudContent.title}
                 </h2>
             </div>
 
@@ -38,7 +44,7 @@ export default function WhySmartCloud() {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl" />
 
                     <div className="relative z-10 flex flex-col items-center gap-6">
-                        <div className="relative w-[4.5rem] h-[4.5rem] flex items-center justify-center">
+                        <div className="relative w-18 h-18 flex items-center justify-center">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={`icon-${currentIndex}`}
@@ -118,7 +124,7 @@ export default function WhySmartCloud() {
                                 transition={{ duration: 0.5, delay: 0.3 }}
                                 className="text-3xl font-bold text-secondary"
                             >
-                                10+
+                                {whySmartCloudContent.experience.years}
                             </motion.h3>
                             <motion.span 
                                 initial={{ opacity: 0, y: 10 }}
@@ -127,7 +133,7 @@ export default function WhySmartCloud() {
                                 transition={{ duration: 0.5, delay: 0.4 }}
                                 className="text-3xl font-bold text-secondary"
                             >
-                                Years
+                                {whySmartCloudContent.experience.yearsText}
                             </motion.span>
                         </motion.div>
 
@@ -138,7 +144,7 @@ export default function WhySmartCloud() {
                             transition={{ duration: 0.5, delay: 0.5 }}
                             className="text-lg md:text-xl font-bold text-slate-700 uppercase tracking-wide"
                         >
-                            Of Leading Experience
+                            {whySmartCloudContent.experience.title}
                         </motion.h4>
 
                         <motion.p 
@@ -148,7 +154,7 @@ export default function WhySmartCloud() {
                             transition={{ duration: 0.8, delay: 0.6 }}
                             className="text-slate-500 text-sm md:text-base max-w-xs mx-auto mt-2"
                         >
-                            Delivering excellence in smart automation and integrated systems since our inception.
+                            {whySmartCloudContent.experience.desc}
                         </motion.p>
                     </div>
                 </motion.div>

@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Cairo } from "next/font/google"; // Import Arabic font
 import "./globals.css";
 import LoadingScreen from "./components/ui/LoadingScreen";
 import WhatsAppButton from "./components/ui/WhatsAppButton";
+import { LanguageProvider } from "./context/LanguageContext";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
+  variable: "--font-geist-sans",  
   subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const cairo = Cairo({
+    variable: "--font-cairo",
+    subsets: ["arabic"],
 });
 
 export const metadata: Metadata = {
@@ -27,11 +33,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cairo.variable} antialiased overflow-x-hidden font-cairo`} // apply cairo
       >
-        <LoadingScreen />
-        <WhatsAppButton />
-        {children}
+        <LanguageProvider>
+           <LoadingScreen />
+           <WhatsAppButton />
+           {children}
+        </LanguageProvider>
       </body>
     </html>
   );

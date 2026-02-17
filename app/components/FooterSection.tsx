@@ -2,9 +2,50 @@
 
 import { motion } from "framer-motion";
 import { Lightbulb, Sparkles, Phone, Mail, MapPin, Clock, Cloud } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
+import { content } from "../data/contentData";
 
 export default function FooterSection() {
+  const { language } = useLanguage();
+  const footerData = content[language].footer;
+  const servicesData = content[language].services;
+  
+  const relevantServiceIds = [
+    "smart-mosques",
+    "energy-solar",
+    "audio-visual",
+    "smart-buildings-iot"
+  ];
+
+  const displayedServices = relevantServiceIds.map(id => {
+    const service = servicesData.find(s => s.id === id);
+    return service ? service.title : "";
+  }).filter(Boolean);
+
+  const supportService = language === 'en' ? "Support & Maintenance" : "الدعم والصيانة";
+  displayedServices.push(supportService);
+
+  const texts = language === 'en' ? {
+    companyName: "Smart Cloud",
+    description: "Transforming spaces into intelligent, safe, and easy-to-control environments through innovative smart solutions. Your happiness is our success.",
+    servicesTitle: "Services",
+    contactTitle: "Contact",
+    businessHoursTitle: "Business Hours:",
+    businessHours: "Saturday to Thursday:",
+    businessTime: "9:00 AM - 6:00 PM",
+    closed: "Friday: Closed",
+    rights: "© " + new Date().getFullYear() + " Smart Cloud. All rights reserved."
+  } : {
+    companyName: "السحابة الذكية",
+    description: "تحويل المساحات إلى بيئات ذكية وآمنة وسهلة التحكم من خلال حلول ذكية مبتكرة. سعادتكم هي نجاحنا.",
+    servicesTitle: "خدماتنا",
+    contactTitle: "تواصل معنا",
+    businessHoursTitle: "ساعات العمل:",
+    businessHours: "السبت إلى الخميس:",
+    businessTime: "9:00 صباحاً - 6:00 مساءً",
+    closed: "الجمعة: مغلق",
+    rights: "© " + new Date().getFullYear() + " السحابة الذكية. جميع الحقوق محفوظة."
+  };
 
   return (
     <section className="relative flex snap-start items-center justify-center bg-linear-to-b from-slate-50 to-blue-50 pt-8 pb-12 md:pt-8 md:pb-12 border-t border-secondary/20" style={{ isolation: "isolate", zIndex: 1 }}>
@@ -19,7 +60,7 @@ export default function FooterSection() {
 
       {/* Floating Background Icons */}
       <motion.div
-        className="absolute left-10 top-20 text-secondary/10"
+        className="absolute left-10 top-20 text-secondary/10 rtl:right-10 rtl:left-auto"
         animate={{
           rotate: [0, 360],
           y: [0, -30, 0],
@@ -29,7 +70,7 @@ export default function FooterSection() {
         <Lightbulb size={200} />
       </motion.div>
       <motion.div
-        className="absolute right-10 bottom-20 text-secondary/10"
+        className="absolute right-10 bottom-20 text-secondary/10 rtl:left-10 rtl:right-auto"
         animate={{
           rotate: [360, 0],
           y: [0, 30, 0],
@@ -53,10 +94,10 @@ export default function FooterSection() {
               <div className="rounded-full bg-secondary p-2">
                 <Cloud className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-lg sm:text-xl md:text-xl font-bold text-slate-900">Smart Cloud</h3>
+              <h3 className="text-lg sm:text-xl md:text-xl font-bold text-slate-900">{texts.companyName}</h3>
             </div>
-            <p className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed">
-              Transforming spaces into intelligent, safe, and easy-to-control environments through innovative smart solutions. Your happiness is our success.
+            <p className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed text-start">
+              {texts.description}
             </p>
           </motion.div>
 
@@ -69,16 +110,10 @@ export default function FooterSection() {
             className="sm:flex sm:justify-center"
           >
             <div>
-              <h4 className="mb-3 sm:mb-3 md:mb-4 text-base sm:text-lg md:text-lg font-semibold text-slate-900">Services</h4>
-              <ul className="space-y-1.5 sm:space-y-1.5 md:space-y-2">
-                {[
-                  "Smart Mosque Services",
-                  "Energy Saving & Solar",
-                  "Audio & Visual Systems",
-                  "Smart Buildings & IoT",
-                  "Support & Maintenance",
-                ].map((service) => (
-                  <li key={service}>
+              <h4 className="mb-3 sm:mb-3 md:mb-4 text-base sm:text-lg md:text-lg font-semibold text-slate-900 text-start">{texts.servicesTitle}</h4>
+              <ul className="space-y-1.5 sm:space-y-1.5 md:space-y-2 text-start">
+                {displayedServices.map((service, idx) => (
+                  <li key={idx}>
                     <span className="text-xs sm:text-sm md:text-base text-slate-600">
                       {service}
                     </span>
@@ -97,11 +132,11 @@ export default function FooterSection() {
             className="sm:flex sm:justify-end"
           >
             <div>
-              <h4 className="mb-3 sm:mb-3 md:mb-4 text-base sm:text-lg md:text-lg font-semibold text-slate-900">Contact</h4>
+              <h4 className="mb-3 sm:mb-3 md:mb-4 text-base sm:text-lg md:text-lg font-semibold text-slate-900 text-start">{texts.contactTitle}</h4>
               <ul className="space-y-2 sm:space-y-2 md:space-y-3">
                 <li className="flex items-center gap-3 text-xs sm:text-sm md:text-base text-slate-600">
-                  <Phone className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-secondary" />
-                  <span>+966 59 485 6028</span>
+                  <Phone className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-secondary rtl:-scale-x-100" />
+                  <span dir="ltr">+966 59 485 6028</span>
                 </li>
                 <li className="flex items-center gap-3 text-xs sm:text-sm md:text-base text-slate-600">
                   <Mail className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-secondary" />
@@ -109,7 +144,7 @@ export default function FooterSection() {
                 </li>
                 <li className="flex items-center gap-3 text-xs sm:text-sm md:text-base text-slate-600">
                   <MapPin className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-secondary" />
-                  <span>Riyadh, Saudi Arabia</span>
+                  <span>{language === 'en' ? "Riyadh, Saudi Arabia" : "الرياض، المملكة العربية السعودية"}</span>
                 </li>
               </ul>
             </div>
@@ -126,10 +161,10 @@ export default function FooterSection() {
         >
           <div className="flex flex-wrap items-center gap-2 sm:gap-2 md:gap-3 text-xs sm:text-sm md:text-base text-slate-600">
             <Clock className="h-4 w-4 sm:h-4 md:h-5 sm:w-4 md:w-5 shrink-0 text-secondary" />
-            <span className="font-semibold">Business Hours:</span>
-            <span>Saturday to Thursday:</span>
-            <span>9:00 AM - 6:00 PM</span>
-            <span className="whitespace-nowrap">Friday: Closed</span>
+            <span className="font-semibold">{texts.businessHoursTitle}</span>
+            <span>{texts.businessHours}</span>
+            <span>{texts.businessTime}</span>
+            <span className="whitespace-nowrap">{texts.closed}</span>
           </div>
         </motion.div>
 
@@ -141,8 +176,8 @@ export default function FooterSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <p className="text-xs sm:text-sm md:text-base text-slate-600 text-left">
-            © {new Date().getFullYear()} Smart Cloud. All rights reserved.
+          <p className="text-xs sm:text-sm md:text-base text-slate-600 w-full text-start">
+            {texts.rights}
           </p>
         </motion.div>
       </div>

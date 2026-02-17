@@ -50,6 +50,7 @@ export default function LoadingScreen() {
 
   return (
     <motion.div
+      dir="ltr"
       className="fixed inset-0 z-9999 flex items-center justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900"
       initial={{ opacity: 1 }}
       animate={{ opacity: isLoading ? 1 : 0 }}

@@ -2,11 +2,22 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Target, Eye, Heart, ArrowRight, ArrowDownRight } from "lucide-react";
+import { Target, Eye, Heart, ArrowDownRight, ArrowDownLeft } from "lucide-react";
 import CertificationsSlideshow from "./CertificationsSlideshow";
-import { aboutContent } from "../data/contentData";
+import { content } from "../data/contentData";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function AboutSection() {
+    const { language } = useLanguage();
+    const aboutData = content[language].about;
+    const mission = aboutData.content.mission;
+    const vision = aboutData.content.vision;
+    const values = aboutData.content.values;
+
+    const description = language === 'en' 
+        ? "Smart Cloud specializes in intelligent solutions and integrated systems for hotels, homes, offices, corporate, and government sectors. We transform environments into smart, safe, and easily controllable spaces."
+        : "تتخصص السحابة الذكية في الحلول الذكية والأنظمة المتكاملة للفنادق والمنازل والمكاتب والشركات والقطاعات الحكومية. نحن نحول البيئات إلى مساحات ذكية وآمنة وسهلة التحكم.";
+
     return (
         <div className="mx-auto max-w-6xl w-full">
             <motion.div
@@ -18,9 +29,13 @@ export default function AboutSection() {
             >
                 <div className="flex items-center gap-4 px-2 sm:px-0">
                     <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-                        Who We Are
+                        {aboutData.subtitle}
                     </h2>
-                    <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                    {language === 'en' ? (
+                      <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                    ) : (
+                      <ArrowDownLeft className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:-translate-x-1 group-hover:translate-y-1" />
+                    )}
                 </div>
 
                 <motion.div
@@ -33,8 +48,7 @@ export default function AboutSection() {
                         transition={{ duration: 0.8, delay: 0.4 }}
                         className="text-sm lg:text-base text-slate-700 leading-relaxed text-start"
                     >
-                        Smart Cloud specializes in intelligent solutions and integrated systems for hotels, homes, offices,
-                        corporate, and government sectors. We transform environments into smart, safe, and easily controllable spaces.
+                        {description}
                     </motion.p>
                 </motion.div>
             </motion.div>
@@ -47,11 +61,11 @@ export default function AboutSection() {
                     transition={{ duration: 0.6 }}
                     className="relative"
                 >
-                    <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-slate-200" />
+                    <div className="absolute rtl:right-4 rtl:sm:right-6 left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-slate-200" />
 
                     <div className="space-y-8">
-                        <div className="relative pl-12 sm:pl-16 z-10">
-                            <div className="absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
+                        <div className="relative pl-12 sm:pl-16 rtl:pr-12 rtl:sm:pr-16 z-10">
+                            <div className="absolute left-0 rtl:right-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
                                 <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                             </div>
                             <div className="bg-white rounded-lg p-5 sm:p-6 md:p-7 shadow-lg border-2 border-primary/30 max-w-md">
@@ -62,7 +76,7 @@ export default function AboutSection() {
                                     transition={{ duration: 0.5, delay: 0.3 }}
                                     className="inline-block px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold mb-3"
                                 >
-                                    Mission
+                                    {mission.title}
                                 </motion.span>
                                 <motion.p 
                                     initial={{ opacity: 0, x: -20 }}
@@ -71,13 +85,13 @@ export default function AboutSection() {
                                     transition={{ duration: 0.8, delay: 0.4 }}
                                     className="text-sm sm:text-base text-slate-700 leading-relaxed"
                                 >
-                                    {aboutContent.mission}
+                                    {mission.text}
                                 </motion.p>
                             </div>
                         </div>
 
-                        <div className="relative pl-12 sm:pl-16 z-10">
-                            <div className="absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
+                        <div className="relative pl-12 sm:pl-16 rtl:pr-12 rtl:sm:pr-16 z-10">
+                            <div className="absolute left-0 rtl:right-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
                                 <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                             </div>
                             <div className="bg-white rounded-lg p-5 sm:p-6 md:p-7 shadow-lg border-2 border-primary/30 max-w-md">
@@ -88,7 +102,7 @@ export default function AboutSection() {
                                     transition={{ duration: 0.5, delay: 0.3 }}
                                     className="inline-block px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold mb-3"
                                 >
-                                    Vision
+                                    {vision.title}
                                 </motion.span>
                                 <motion.p 
                                     initial={{ opacity: 0, x: -20 }}
@@ -97,13 +111,13 @@ export default function AboutSection() {
                                     transition={{ duration: 0.8, delay: 0.4 }}
                                     className="text-sm sm:text-base text-slate-700 leading-relaxed"
                                 >
-                                    {aboutContent.vision}
+                                    {vision.text}
                                 </motion.p>
                             </div>
                         </div>
 
-                        <div className="relative pl-12 sm:pl-16 z-10">
-                            <div className="absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
+                        <div className="relative pl-12 sm:pl-16 rtl:pr-12 rtl:sm:pr-16 z-10">
+                            <div className="absolute left-0 rtl:right-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-secondary bg-secondary shadow-lg shadow-secondary/50 flex items-center justify-center shrink-0 animate-pulse-circle z-20">
                                 <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-white fill-white" />
                             </div>
                             <div className="bg-white rounded-lg p-5 sm:p-6 md:p-7 shadow-lg border-2 border-primary/30 max-w-md">
@@ -114,7 +128,7 @@ export default function AboutSection() {
                                     transition={{ duration: 0.5, delay: 0.3 }}
                                     className="inline-block px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold mb-3"
                                 >
-                                    Values
+                                    {values.title}
                                 </motion.span>
                                 <motion.p 
                                     initial={{ opacity: 0, x: -20 }}
@@ -123,7 +137,7 @@ export default function AboutSection() {
                                     transition={{ duration: 0.8, delay: 0.4 }}
                                     className="text-sm sm:text-base text-slate-700 leading-relaxed"
                                 >
-                                    {aboutContent.values}
+                                    {values.text}
                                 </motion.p>
                             </div>
                         </div>

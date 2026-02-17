@@ -7,7 +7,8 @@ import HomeSection from "./HomeSection";
 import AboutSection from "./AboutSection";
 import ServicesSection from "./ServicesSection";
 import PortfolioSection from "./PortfolioSection";
-import { navItems } from "../data/contentData";
+import { content } from "../data/contentData";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ContentSection() {
   const [activeSection, setActiveSection] = useState(0);
@@ -16,6 +17,9 @@ export default function ContentSection() {
   const lastScrollYRef = useRef(0);
   const isProgrammaticScrollRef = useRef(false);
   const sectionRef = useRef<HTMLElement>(null);
+
+  const { language } = useLanguage();
+  const navItems = content[language].navItems;
 
   const navigateToSection = (index: number) => {
     setIsNavigated(true);
@@ -93,7 +97,7 @@ export default function ContentSection() {
     <>
       <section ref={sectionRef} className="relative flex flex-col justify-start bg-slate-200 pt-0 pb-8 md:pt-0 md:pb-8 lg:py-8 h-auto overflow-x-hidden" style={{ zIndex: 1 }}>
         <div className="hidden lg:block absolute right-4 z-50 lg:right-6" style={{ top: "75vh", transform: "translateY(-50%)" }}>
-          <SectionIndicator activeSection={activeSection} onSectionChange={navigateToSection} />
+          <SectionIndicator sections={navItems} activeSection={activeSection} onSectionChange={navigateToSection} />
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 pt-10 sm:pt-16 md:pt-12 lg:pt-0">

@@ -1,21 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Home, Info, Wrench, FolderKanban } from "lucide-react";
 
 interface SectionIndicatorProps {
+  sections: { name: string; icon: any; href?: string }[];
   activeSection: number;
   onSectionChange: (index: number) => void;
 }
 
-const sections = [
-  { name: "Home", icon: Home },
-  { name: "About", icon: Info },
-  { name: "Services", icon: Wrench },
-  { name: "Portfolio", icon: FolderKanban },
-];
-
-export default function SectionIndicator({ activeSection, onSectionChange }: SectionIndicatorProps) {
+export default function SectionIndicator({ sections, activeSection, onSectionChange }: SectionIndicatorProps) {
   return (
     <>
       {/* All Devices - Right Side */}

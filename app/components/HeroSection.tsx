@@ -5,10 +5,14 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Globe } from "lucide-react";
 import InteractiveMap from "./InteractiveMap";
+import { useLanguage } from "../context/LanguageContext";
+import { content } from "../data/contentData";
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
+  const { language, toggleLanguage } = useLanguage();
+  const heroContent = content[language].hero;
 
   const handleUaeClick = () => {
     window.open("https://turbotechnikmt.com", "_blank", "noopener,noreferrer");
@@ -58,8 +62,11 @@ export default function HeroSection() {
             className="h-auto w-auto max-w-20 sm:max-w-24 md:max-w-28"
             priority
           />
-          <button className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm md:px-6 md:py-2.5 md:text-base font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:scale-105 cursor-pointer">
-            <span>العربية</span>
+          <button 
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm md:px-6 md:py-2.5 md:text-base font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:scale-105 cursor-pointer"
+          >
+            <span>{language === 'en' ? 'العربية' : 'English'}</span>
             <Globe className="h-4 w-4 md:h-5 md:w-5 text-secondary" />
           </button>
         </div>
@@ -104,7 +111,7 @@ export default function HeroSection() {
       {/* Content Container - Left-aligned with padding */}
       <div className="relative z-10 flex w-full flex-col gap-8 px-4 sm:gap-10 sm:px-8 xl:flex-row xl:items-center xl:gap-32 xl:px-12">
         {/* Left Side - Text Content */}
-        <div className="w-full max-w-full sm:max-w-2xl mx-auto sm:mx-0 lg:text-left">
+        <div className="w-full max-w-full sm:max-w-2xl mx-auto sm:mx-0 lg:text-left rtl:lg:text-right">
           {/* Mobile text */}
           <motion.div 
             className="block xl:hidden space-y-3"
@@ -118,7 +125,7 @@ export default function HeroSection() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-xl sm:text-2xl font-bold text-white leading-tight"
             >
-              Delivering Intelligent Technology Solutions
+              {heroContent.title}
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
@@ -126,7 +133,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-white/90 text-sm sm:text-base"
             >
-              We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
+              {heroContent.subtitle}
             </motion.p>
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
@@ -134,7 +141,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-white/90 text-sm sm:text-base"
             >
-              Operating in Saudi Arabia, UAE and Egypt
+              {heroContent.countrySelector}
             </motion.p>
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
@@ -142,7 +149,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="font-semibold text-primary text-sm sm:text-base"
             >
-              Choose your country to continue
+              {heroContent.chooseCountry}
             </motion.p>
           </motion.div>
 
@@ -159,7 +166,7 @@ export default function HeroSection() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5 md:mb-6 leading-tight"
             >
-              Delivering Intelligent Technology Solutions
+              {heroContent.title}
             </motion.h1>
 
             <motion.p 
@@ -168,7 +175,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-5 sm:mb-6 md:mb-7"
             >
-              We empower businesses with expert guidance and turnkey solutions across smart automation, ELV systems, and marine technical supplies. Delivering innovative, sustainable operations tailored to your unique needs.
+              {heroContent.subtitle}
             </motion.p>
 
             <motion.div 
@@ -183,7 +190,7 @@ export default function HeroSection() {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="text-primary text-base sm:text-lg md:text-xl lg:text-xl font-semibold"
               >
-                Three Regional Offices: Saudi Arabia, UAE and Egypt
+                {heroContent.regionalOffices}
               </motion.p>
               <motion.p 
                 initial={{ opacity: 0, x: -20 }}
@@ -191,7 +198,7 @@ export default function HeroSection() {
                 transition={{ duration: 0.8, delay: 0.7 }}
                 className="text-white/70 text-sm sm:text-base md:text-base"
               >
-                Select your regional office to explore location-specific services and <br /> connect with our local team.
+                {heroContent.selectOffice}
               </motion.p>
             </motion.div>
           </motion.div>
@@ -199,7 +206,8 @@ export default function HeroSection() {
 
         {/* Mobile Section - Flag Buttons with Dotted Line */}
         <div className="w-full xl:hidden flex">
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 flex-row-reverse rtl:flex-row">
+            
             {/* Saudi Arabia Button */}
             <button
               onClick={handleSaudiClick}
@@ -210,12 +218,12 @@ export default function HeroSection() {
                 alt="Saudi Arabia Flag"
                 className="w-4 h-3 sm:w-5 sm:h-4 object-cover rounded shrink-0"
               />
-              <span className="text-[10px] sm:text-xs font-bold text-[#1e3a5f]">Saudi Arabia</span>
+              <span className="text-[10px] sm:text-xs font-bold text-[#1e3a5f]">{language === 'en' ? 'Saudi Arabia' : 'السعودية'}</span>
             </button>
 
             {/* First Curved Dotted Line Connector (Saudi to UAE) */}
             <svg
-              className="opacity-80 shrink-0"
+              className="opacity-80 shrink-0 rtl:rotate-180"
               width="24"
               height="16"
               viewBox="0 0 24 16"
@@ -242,12 +250,12 @@ export default function HeroSection() {
                 alt="UAE Flag"
                 className="w-4 h-3 sm:w-5 sm:h-4 object-cover rounded shrink-0"
               />
-              <span className="text-[10px] sm:text-xs font-bold text-white">UAE</span>
+              <span className="text-[10px] sm:text-xs font-bold text-white">{language === 'en' ? 'UAE' : 'الإمارات'}</span>
             </button>
 
             {/* Second Curved Dotted Line Connector (UAE to Egypt) */}
             <svg
-              className="opacity-80 shrink-0"
+              className="opacity-80 shrink-0 rtl:rotate-180"
               width="24"
               height="16"
               viewBox="0 0 24 16"
@@ -274,7 +282,7 @@ export default function HeroSection() {
                 alt="Egypt Flag"
                 className="w-4 h-3 sm:w-5 sm:h-4 object-cover rounded shrink-0"
               />
-              <span className="text-[10px] sm:text-xs font-bold text-[#1e3a5f]">Egypt</span>
+              <span className="text-[10px] sm:text-xs font-bold text-[#1e3a5f]">{language === 'en' ? 'Egypt' : 'مصر'}</span>
             </button>
           </div>
         </div>
@@ -304,10 +312,10 @@ export default function HeroSection() {
               {/* Header Section */}
               <div className="mb-4 sm:mb-4 text-center">
                 <h2 className="text-base sm:text-lg font-semibold text-white mb-1">
-                  Regional Branch Selector
+                  {heroContent.selectorTitle}
                 </h2>
                 <p className="text-xs sm:text-xs text-white/60">
-                  Choose your regional office to continue
+                  {heroContent.selectorSubtitle}
                 </p>
               </div>
 
@@ -323,7 +331,7 @@ export default function HeroSection() {
               <div className="mt-4 sm:mt-4 text-center">
                 <p className="text-xs sm:text-xs text-white/50 flex items-center justify-center gap-1.5">
                   <span className="inline-block w-1.5 sm:w-1.5 h-1.5 sm:h-1.5 rounded-full bg-secondary" />
-                  <span>Click a location pin to explore services</span>
+                  <span>{heroContent.clickPin}</span>
                 </p>
               </div>
             </motion.div>

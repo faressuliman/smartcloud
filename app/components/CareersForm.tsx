@@ -1,12 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle, Upload, ArrowDownRight, Info } from "lucide-react";
+import { CheckCircle, Upload, ArrowDownRight, ArrowDownLeft, Info } from "lucide-react";
 import { useState, useCallback, useMemo } from "react";
 import { z } from "zod";
-import { careersSchema, careersTextFieldsSchema, type CareersFormData } from "../validation/careers";
+import { careersTextFieldsSchema, type CareersFormData } from "../validation/careers";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function CareersForm() {
+  const { language } = useLanguage();
   const [formData, setFormData] = useState<CareersFormData>({
     fullName: "",
     email: "",
@@ -16,6 +18,42 @@ export default function CareersForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof CareersFormData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const t = language === 'en' ? {
+    header: "Join Our Team",
+    desc: "We're looking for talented professionals passionate about smart technology and innovation. Submit your application to join our growing team.",
+    fullName: "Full Name",
+    email: "Email Address",
+    phone: "Phone Number",
+    cvLabel: "Upload CV / Resume *",
+    clickToUpload: "Click to upload or drag and drop",
+    fileTypes: "PDF, DOC, DOCX (MAX. 10MB)",
+    submit: "Submit Application",
+    submitting: "Submitting...",
+    successTitle: "Thank you!",
+    successMsg: "We'll review your application soon.",
+    errors: {
+      cvRequired: "CV/Resume is required",
+      submitFail: "Failed to submit. Please try again."
+    }
+  } : {
+    header: "انضم إلى فريقنا",
+    desc: "نحن نبحث عن محترفين موهوبين شغوفين بالتكنولوجيا الذكية والابتكار. قدم طلبك للانضمام إلى فريقنا المتنامي.",
+    fullName: "الاسم الكامل",
+    email: "البريد الإلكتروني",
+    phone: "رقم الهاتف",
+    cvLabel: "تحميل السيرة الذاتية *",
+    clickToUpload: "اضغط للتحميل أو اسحب وأفلت",
+    fileTypes: "PDF, DOC, DOCX (حد أقصى 10 ميجابايت)",
+    submit: "إرسال الطلب",
+    submitting: "جاري الإرسال...",
+    successTitle: "شكراً لك!",
+    successMsg: "سنراجع طلبك قريباً.",
+    errors: {
+      cvRequired: "السيرة الذاتية مطلوبة",
+      submitFail: "فشل الإرسال. يرجى المحاولة مرة أخرى."
+    }
+  };
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -57,7 +95,7 @@ export default function CareersForm() {
 
       // Check CV
       if (!formData.cv) {
-        setErrors({ cv: "CV/Resume is required" });
+        setErrors({ cv: t.errors.cvRequired });
         return;
       }
 
@@ -81,7 +119,7 @@ export default function CareersForm() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "Failed to submit form");
+        throw new Error(errorData.error || t.errors.submitFail);
       }
 
       setIsSuccess(true);
@@ -105,11 +143,11 @@ export default function CareersForm() {
         });
         // Also check CV if it's missing
         if (!formData.cv) {
-          fieldErrors.cv = "CV/Resume is required";
+          fieldErrors.cv = t.errors.cvRequired;
         }
         setErrors(fieldErrors);
       } else {
-        const errorMessage = error instanceof Error ? error.message : "Failed to submit. Please try again.";
+        const errorMessage = error instanceof Error ? error.message : t.errors.submitFail;
         // Only show CV error if CV is missing; otherwise rely on general messaging/UI
         if (!formData.cv) {
           setErrors({ cv: errorMessage });
@@ -121,7 +159,7 @@ export default function CareersForm() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData]);
+  }, [formData, t.errors.cvRequired, t.errors.submitFail]);
 
   const inputClass = useMemo(() => 
     "w-full rounded-lg border-2 border-transparent bg-slate-50/80 px-4 py-3 text-[#1e3a5f] transition-all duration-200 ease-out focus:border-primary focus:bg-white focus:shadow-md focus:outline-none placeholder:text-slate-400"
@@ -137,12 +175,16 @@ export default function CareersForm() {
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-4">
           <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-            Join Our Team
+            {t.header}
           </h2>
-          <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+          {language === 'en' ? (
+            <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+          ) : (
+            <ArrowDownLeft className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+          )}
         </div>
-        <p className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed">
-          We&apos;re looking for talented professionals passionate about smart technology and innovation. Submit your application to join our growing team.
+        <p className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed text-start">
+          {t.desc}
         </p>
       </div>
       <div>
@@ -160,11 +202,12 @@ export default function CareersForm() {
           >
             <CheckCircle className="mb-4 h-16 w-16 text-emerald-500" />
           </motion.div>
-          <p className="text-xl font-semibold text-[#1e3a5f] mb-2">Thank you!</p>
-          <p className="text-slate-600">We&apos;ll review your application soon.</p>
+          <p className="text-xl font-semibold text-[#1e3a5f] mb-2">{t.successTitle}</p>
+          <p className="text-slate-600">{t.successMsg}</p>
         </motion.div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          {/* Full Name & Phone */}
           <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
             <div>
               <input
@@ -172,8 +215,8 @@ export default function CareersForm() {
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                className={`${inputClass} text-xs sm:text-base`}
-                placeholder="Full Name"
+                className={`${inputClass} text-xs sm:text-base text-start`}
+                placeholder={t.fullName}
               />
               {errors.fullName && (
                 <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
@@ -184,40 +227,41 @@ export default function CareersForm() {
             </div>
             <div>
               <input
-                type="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                name="phone"
+                value={formData.phone}
                 onChange={handleChange}
-                className={`${inputClass} text-xs sm:text-base`}
-                placeholder="Email Address"
+                className={`${inputClass} text-xs sm:text-base text-start`}
+                placeholder={t.phone}
               />
-              {errors.email && (
+              {errors.phone && (
                 <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
                   <Info className="text-red-700 w-3 h-3" />
-                  {errors.email}
+                  {errors.phone}
                 </p>
               )}
             </div>
           </div>
+          {/* Email */}
           <div>
             <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              className="w-full rounded-lg border-2 border-transparent bg-slate-50/80 px-4 py-3 text-[#1e3a5f] transition-all duration-200 ease-out focus:border-primary focus:bg-white focus:shadow-md focus:outline-none placeholder:text-xs sm:placeholder:text-base placeholder:text-slate-400"
-              placeholder="Phone Number"
+              className={`${inputClass} text-xs sm:text-base text-start`}
+              placeholder={t.email}
             />
-            {errors.phone && (
+            {errors.email && (
               <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
                 <Info className="text-red-700 w-3 h-3" />
-                {errors.phone}
+                {errors.email}
               </p>
             )}
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-[#1e3a5f]">
-              Upload CV / Resume *
+            <label className="mb-2 block text-sm font-medium text-[#1e3a5f] text-start">
+              {t.cvLabel}
             </label>
             <div className="relative">
               <input
@@ -231,9 +275,9 @@ export default function CareersForm() {
                 <Upload className="h-6 w-6 text-[#1e3a5f]" />
                 <div>
                   <p className="text-sm font-medium text-[#1e3a5f]">
-                    {formData.cv ? formData.cv.name : "Click to upload or drag and drop"}
+                    {formData.cv ? formData.cv.name : t.clickToUpload}
                   </p>
-                  <p className="text-xs text-slate-600">PDF, DOC, DOCX (MAX. 10MB)</p>
+                  <p className="text-xs text-slate-600">{t.fileTypes}</p>
                 </div>
               </div>
             </div>
@@ -266,10 +310,10 @@ export default function CareersForm() {
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                <span className="text-sm sm:text-base">Submitting...</span>
+                <span className="text-sm sm:text-base">{t.submitting}</span>
               </>
             ) : (
-              <span className="text-sm sm:text-base">Submit Application</span>
+              <span className="text-sm sm:text-base">{t.submit}</span>
             )}
           </motion.button>
         </form>

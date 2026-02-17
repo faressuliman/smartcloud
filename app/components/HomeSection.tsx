@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDownRight, ArrowRight } from "lucide-react";
+import { ArrowDownRight, ArrowDownLeft, ArrowRight } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import HomeFeatureCard from "./ui/HomeFeatureCard";
 import WhySmartCloud from "./WhySmartCloud";
-import { homeFeatures, sliderConfig } from "../data/contentData";
+import { sliderConfig, content } from "../data/contentData";
+import { useLanguage } from "../context/LanguageContext";
 
 interface HomeSectionProps {
     isNavigated: boolean;
@@ -17,6 +18,20 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
     const [touchStart, setTouchStart] = useState(0);
     const [touchEnd, setTouchEnd] = useState(0);
     const homeCardIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    const { language } = useLanguage();
+    const currentContent = content[language];
+    const homeFeatures = currentContent.homeFeatures;
+
+    const sections = language === 'en' ? {
+        welcomeTitle: "Welcome to Smart Cloud",
+        whatWeDoTitle: "What We Can Do For You",
+        welcomeDesc: "Smart Cloud is a leading provider of intelligent technology solutions, specializing in smart automation, ELV systems, and marine technical supplies. With years of expertise, we ensure the highest standards of quality and reliability for all your technology needs."
+    } : {
+        welcomeTitle: "مرحباً بكم في السحابة الذكية",
+        whatWeDoTitle: "ما يمكننا فعله لك",
+        welcomeDesc: "السحابة الذكية هي شركة رائدة في تقديم حلول التكنولوجيا الذكية، متخصصة في الأتمتة الذكية، وأنظمة الجهد المنخفض، والتوريدات الفنية البحرية. بفضل سنوات من الخبرة، نضمن أعلى معايير الجودة والموثوقية لجميع احتياجاتك التقنية."
+    };
 
     useEffect(() => {
         if (homeCardIntervalRef.current) {
@@ -62,9 +77,9 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
             >
                 <div className="flex items-center gap-4 px-2 sm:px-0">
                     <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-                        Welcome to Smart Cloud
+                        {sections.welcomeTitle}
                     </h2>
-                    <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                    <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1 rtl:rotate-90" />
                 </div>
 
                 <motion.div
@@ -77,7 +92,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                         transition={{ duration: 0.8, delay: 0.4 }}
                         className="text-sm lg:text-base text-slate-600 leading-relaxed text-start"
                     >
-                        Smart Cloud is a leading provider of intelligent technology solutions, specializing in smart automation, ELV systems, and marine technical supplies. With years of expertise, we ensure the highest standards of quality and reliability for all your technology needs.
+                        {sections.welcomeDesc}
                     </motion.p>
                 </motion.div>
             </motion.div>
@@ -87,7 +102,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.4 }}
-                className="pb-12 sm:pb-16 md:pb-20 lg:pb-24"
+                className="pb-16 md:pb-20 lg:pb-26"
             >
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -97,9 +112,13 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                     className="pb-4 border-b border-slate-200/60 px-4 md:px-4 lg:px-0 flex items-center gap-4"
                 >
                     <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-                        What We Can Do For You
+                        {sections.whatWeDoTitle}
                     </h2>
-                    <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                    {language === 'en' ? (
+                      <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                    ) : (
+                      <ArrowDownLeft className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:-translate-x-1 group-hover:translate-y-1" />
+                    )}
                 </motion.div>
 
                 <div className="relative md:px-4 lg:px-0">
@@ -122,14 +141,14 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                             className="w-12 h-12 bg-primary hover:bg-primary/90 text-white rounded-full flex items-center justify-center transition-colors shadow-lg cursor-pointer"
                             aria-label="Toggle slide"
                         >
-                            <ArrowRight className="w-5 h-5" />
+                            <ArrowRight className={`w-5 h-5 ${language === 'ar' ? 'rotate-180' : ''}`} />
                         </button>
                     </div>
 
                     <div className="hidden md:block overflow-hidden py-4 -my-4">
                         <motion.div
                             className="flex"
-                            animate={{ x: featureSlideIndex === 0 ? "0%" : "-50%" }}
+                            animate={{ x: featureSlideIndex === 0 ? "0%" : (language === 'ar' ? "50%" : "-50%") }}
                             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                             style={{ width: "200%" }}
                         >
@@ -166,7 +185,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                     >
                         <div
                             className="flex transition-transform duration-500 ease-in-out"
-                            style={{ transform: `translateX(-${homeCardIndex * 100}%)` }}
+                            style={{ transform: `translateX(${language === 'ar' ? '' : '-'}${homeCardIndex * 100}%)` }}
                         >
                             {homeFeatures.map((item, index) => (
                                 <HomeFeatureCard
@@ -186,7 +205,6 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
             </motion.div>
 
             <WhySmartCloud />
-
         </div>
     );
 }

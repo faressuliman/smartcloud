@@ -2,11 +2,15 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+//@ts-ignore
 import ServiceRequestForm from "./ServiceRequestForm";
+//@ts-ignore
 import CareersForm from "./CareersForm";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ContactSection() {
   const [activeTab, setActiveTab] = useState<"service" | "careers">("service");
+  const { language } = useLanguage();
 
   useEffect(() => {
     const handleSwitchToService = () => {
@@ -18,6 +22,14 @@ export default function ContactSection() {
       window.removeEventListener("switchToServiceTab" as any, handleSwitchToService);
     };
   }, []);
+
+  const tabLabels = language === 'en' ? {
+    requestService: "Request Service",
+    careers: "Careers"
+  } : {
+    requestService: "طلب خدمة",
+    careers: "وظائف"
+  };
 
   return (
     <section id="contact-section" className="relative h-auto bg-linear-to-br from-slate-50 via-white to-slate-100 pb-12 sm:pb-16 md:pb-20 lg:pb-24">
@@ -49,7 +61,7 @@ export default function ContactSection() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <span className="relative z-10">Request Service</span>
+                <span className="relative z-10">{tabLabels.requestService}</span>
               </button>
               <button
                 onClick={() => setActiveTab("careers")}
@@ -66,7 +78,7 @@ export default function ContactSection() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <span className="relative z-10">Careers</span>
+                <span className="relative z-10">{tabLabels.careers}</span>
               </button>
             </div>
           </div>

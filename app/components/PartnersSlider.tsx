@@ -3,10 +3,13 @@
 import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ArrowDownRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { partnerLogos, sliderConfig } from "../data/contentData";
+import { ArrowDownRight, ArrowDownLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
+import { content, partnerLogos, sliderConfig } from "../data/contentData";
 
 export default function PartnersSlider() {
+  const { language } = useLanguage();
+  const { partners } = content[language];
   const [currentSlide, setCurrentSlide] = useState(0);
   const [windowWidth, setWindowWidth] = useState(1024);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
@@ -98,12 +101,16 @@ export default function PartnersSlider() {
             className="flex items-center gap-4"
           >
             <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-              Our Partners
+              {partners.title}
             </h2>
-            <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            {language === 'en' ? (
+              <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            ) : (
+              <ArrowDownLeft className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            )}
           </motion.div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3" dir="ltr">
             <button
               onClick={handlePrevSlide}
               className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer"

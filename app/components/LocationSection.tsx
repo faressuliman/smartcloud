@@ -1,11 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDownRight } from "lucide-react";
+import { ArrowDownRight, ArrowDownLeft } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
+import { content } from "../data/contentData";
 
 export default function LocationSection() {
+  const { language } = useLanguage();
+  const { location } = content[language];
   return (
-    <section className="relative flex snap-start items-center justify-center bg-slate-100 pt-12 pb-14 md:pt-12 md:pb-14 lg:min-h-screen" style={{ isolation: "isolate", zIndex: 1 }}>
+    <section className="relative flex snap-start items-center justify-center bg-slate-100 py-8 md:py-10 lg:py-12" style={{ isolation: "isolate", zIndex: 1 }}>
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -23,9 +27,13 @@ export default function LocationSection() {
           >
             <div className="flex items-center gap-4 px-2 sm:px-0">
               <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
-                Where You Can Find Us
+                {location.title}
               </h2>
-              <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+              {language === 'en' ? (
+                <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+              ) : (
+                <ArrowDownLeft className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+              )}
             </div>
           </motion.div>
           <motion.div

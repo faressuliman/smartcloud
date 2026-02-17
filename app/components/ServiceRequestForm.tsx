@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowDownRight, ChevronDown, Info } from "lucide-react";
+import { CheckCircle, ArrowDownRight, ArrowDownLeft, ChevronDown, Info } from "lucide-react";
 import { useState, useCallback, useMemo } from "react";
 import { z } from "zod";
 import { serviceRequestSchema } from "../validation/service-request";
+import { useLanguage } from "../context/LanguageContext";
 
 type FormData = {
   fullName: string;
@@ -27,6 +28,7 @@ type FormData = {
 };
 
 export default function ServiceRequestForm() {
+  const { language } = useLanguage();
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -37,12 +39,92 @@ export default function ServiceRequestForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const t = language === 'en' ? {
+    header: "Request Service",
+    desc: "Tell us about your smart building project and we'll provide tailored solutions for your needs.",
+    successTitle: "Thank you!",
+    successMsg: "We'll get back to you soon.",
+    fullName: "Full Name",
+    phone: "Phone Number",
+    email: "Email Address",
+    serviceCategory: "Service Category",
+    selectService: "Select a service",
+    designConsulting: "Requesting system design or consulting services",
+    priceQuote: "Request for a price quote for smart building systems",
+    other: "Request other services",
+    buildingType: "Building Type",
+    selectBuildingType: "Select building type",
+    adminBuildings: "Administrative Buildings",
+    offices: "Offices",
+    villasApts: "Villas and Apartments",
+    residentialComplex: "Residential Complex",
+    hotels: "Hotels",
+    palaces: "Palaces",
+    mosques: "Mosques",
+    numRooms: "Number of Rooms",
+    numLightCircuits: "Number of Lighting Circuits",
+    numACUnits: "Number of Air Conditioning Units",
+    numBlinds: "Number of Blinds/Curtains",
+    numFloors: "Number of Floors",
+    numRestrooms: "Number of Restrooms",
+    numCorridors: "Number of Corridors",
+    numExtDoors: "Number of Exterior Doors",
+    numExtCams: "Number of Exterior Cameras",
+    numIntCams: "Number of Interior Cameras",
+    numAudio: "Number of Audio Systems",
+    requirements: "Additional Requirements / Project Details",
+    submit: "Submit Request",
+    submitting: "Submitting...",
+    errors: {
+      submitFail: "Failed to submit. Please try again."
+    }
+  } : {
+    header: "طلب خدمة",
+    desc: "أخبرنا عن مشروع المبنى الذكي الخاص بك وسنقدم حلولاً مخصصة لاحتياجاتك.",
+    successTitle: "شكراً لك!",
+    successMsg: "سنتواصل معك قريباً.",
+    fullName: "الاسم الكامل",
+    phone: "رقم الهاتف",
+    email: "البريد الإلكتروني",
+    serviceCategory: "فئة الخدمة",
+    selectService: "اختر خدمة",
+    designConsulting: "طلب تصميم نظام أو خدمات استشارية",
+    priceQuote: "طلب عرض سعر لأنظمة المباني الذكية",
+    other: "طلب خدمات أخرى",
+    buildingType: "نوع المبنى",
+    selectBuildingType: "اختر نوع المبنى",
+    adminBuildings: "مباني إدارية",
+    offices: "مكاتب",
+    villasApts: "فلل وشقق",
+    residentialComplex: "مجمع سكني",
+    hotels: "فنادق",
+    palaces: "قصور",
+    mosques: "مساجد",
+    numRooms: "عدد الغرف",
+    numLightCircuits: "عدد دوائر الإضاءة",
+    numACUnits: "عدد وحدات التكييف",
+    numBlinds: "عدد الستائر",
+    numFloors: "عدد الطوابق",
+    numRestrooms: "عدد دورات المياه",
+    numCorridors: "عدد الممرات",
+    numExtDoors: "عدد الأبواب الخارجية",
+    numExtCams: "عدد الكاميرات الخارجية",
+    numIntCams: "عدد الكاميرات الداخلية",
+    numAudio: "عدد الأنظمة الصوتية",
+    requirements: "متطلبات إضافية / تفاصيل المشروع",
+    submit: "إرسال الطلب",
+    submitting: "جاري الإرسال...",
+    errors: {
+      submitFail: "فشل الإرسال. يرجى المحاولة مرة أخرى."
+    }
+  };
+
   const inputClass = useMemo(() => 
     "w-full rounded-lg border-2 border-transparent bg-slate-50/80 px-4 py-3 text-[#1e3a5f] transition-all duration-200 ease-out focus:border-primary focus:bg-white focus:shadow-md focus:outline-none placeholder:text-slate-400"
   , []);
   
   const selectClass = useMemo(() => 
-    "w-full rounded-lg border-2 border-transparent bg-slate-50/80 pl-4 pr-10 py-3 text-[#1e3a5f] transition-all duration-200 ease-out focus:border-primary focus:bg-white focus:shadow-md focus:outline-none appearance-none cursor-pointer"
+    "w-full rounded-lg border-2 border-transparent bg-slate-50/80 pl-4 pr-10 rtl:pr-4 rtl:pl-10 py-3 text-[#1e3a5f] transition-all duration-200 ease-out focus:border-primary focus:bg-white focus:shadow-md focus:outline-none appearance-none cursor-pointer"
   , []);
 
   const handleChange = useCallback((
@@ -86,7 +168,7 @@ export default function ServiceRequestForm() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "Failed to submit form");
+        throw new Error(errorData.error || t.errors.submitFail);
       }
 
       setIsSuccess(true);
@@ -110,14 +192,14 @@ export default function ServiceRequestForm() {
         });
         setErrors(fieldErrors);
       } else {
-        const errorMessage = error instanceof Error ? error.message : "Failed to submit. Please try again.";
+        const errorMessage = error instanceof Error ? error.message : t.errors.submitFail;
         setErrors({ serviceCategory: errorMessage });
         console.error(errorMessage);
       }
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData]);
+  }, [formData, t.errors.submitFail]);
 
   return (
     <motion.div
@@ -142,7 +224,7 @@ export default function ServiceRequestForm() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest"
           >
-            Request Service
+            {t.header}
           </motion.h2>
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -150,7 +232,11 @@ export default function ServiceRequestForm() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            {language === 'en' ? (
+              <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            ) : (
+              <ArrowDownLeft className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+            )}
           </motion.div>
         </div>
         <motion.p
@@ -158,9 +244,9 @@ export default function ServiceRequestForm() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed"
+          className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed text-start"
         >
-          Tell us about your smart building project and we&apos;ll provide tailored solutions for your needs.
+          {t.desc}
         </motion.p>
       </motion.div>
 
@@ -178,8 +264,8 @@ export default function ServiceRequestForm() {
             transition={{ type: "spring", stiffness: 200 }}
           >
             <CheckCircle className="mb-4 h-16 w-16 text-emerald-500" />
-            <p className="text-xl font-semibold text-[#1e3a5f] mb-2">Thank you!</p>
-            <p className="text-slate-600">We&apos;ll get back to you soon.</p>
+            <p className="text-xl font-semibold text-[#1e3a5f] mb-2">{t.successTitle}</p>
+            <p className="text-slate-600">{t.successMsg}</p>
           </motion.div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -191,8 +277,8 @@ export default function ServiceRequestForm() {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  className={`${inputClass} text-xs sm:text-base`}
-                  placeholder="Full Name"
+                  className={`${inputClass} text-xs sm:text-base text-start`}
+                  placeholder={t.fullName}
                 />
                 {errors.fullName && (
                   <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
@@ -203,12 +289,12 @@ export default function ServiceRequestForm() {
               </div>
               <div>
                 <input
-                  type="tel"
+                  type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className={`${inputClass} text-xs sm:text-base`}
-                  placeholder="Phone Number"
+                  className={`${inputClass} text-xs sm:text-base text-start`}
+                  placeholder={t.phone}
                 />
                 {errors.phone && (
                   <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
@@ -226,8 +312,8 @@ export default function ServiceRequestForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`${inputClass} text-xs sm:text-base`}
-                placeholder="Email Address"
+                className={`${inputClass} text-xs sm:text-base text-start`}
+                placeholder={t.email}
               />
               {errors.email && (
                 <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
@@ -239,7 +325,7 @@ export default function ServiceRequestForm() {
 
             {/* Service Category */}
             <div>
-              <label htmlFor="serviceCategory" className="block mb-2 text-sm font-medium text-[#1e3a5f]">Service Category</label>
+              <label htmlFor="serviceCategory" className="block mb-2 text-sm font-medium text-[#1e3a5f] text-start">{t.serviceCategory}</label>
               <div className="relative">
                 <select
                   id="serviceCategory"
@@ -248,12 +334,12 @@ export default function ServiceRequestForm() {
                   onChange={handleChange}
                   className={`${selectClass} text-xs sm:text-base`}
                 >
-                  <option value="">Select a service</option>
-                  <option value="design-consulting">Requesting system design or consulting services</option>
-                  <option value="price-quote">Request for a price quote for smart building systems</option>
-                  <option value="other">Request other services</option>
+                  <option value="">{t.selectService}</option>
+                  <option value="design-consulting">{t.designConsulting}</option>
+                  <option value="price-quote">{t.priceQuote}</option>
+                  <option value="other">{t.other}</option>
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#1e3a5f] pointer-events-none" />
+                <ChevronDown className="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#1e3a5f] pointer-events-none" />
               </div>
               {errors.serviceCategory && (
                 <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
@@ -271,23 +357,23 @@ export default function ServiceRequestForm() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="relative">
-                  <label className="block mb-2 text-sm font-medium text-[#1e3a5f]">Building Type</label>
+                  <label className="block mb-2 text-sm font-medium text-[#1e3a5f] text-start">{t.buildingType}</label>
                   <select
                     name="buildingType"
                     value={formData.buildingType || ""}
                     onChange={handleChange}
                     className={`${selectClass} text-xs sm:text-base`}
                   >
-                    <option value="">Select building type</option>
-                    <option value="administrative-buildings">Administrative Buildings</option>
-                    <option value="offices">Offices</option>
-                    <option value="villas-apartments">Villas and Apartments</option>
-                    <option value="residential-complex">Residential Complex</option>
-                    <option value="hotels">Hotels</option>
-                    <option value="palaces">Palaces</option>
-                    <option value="mosques">Mosques</option>
+                    <option value="">{t.selectBuildingType}</option>
+                    <option value="administrative-buildings">{t.adminBuildings}</option>
+                    <option value="offices">{t.offices}</option>
+                    <option value="villas-apartments">{t.villasApts}</option>
+                    <option value="residential-complex">{t.residentialComplex}</option>
+                    <option value="hotels">{t.hotels}</option>
+                    <option value="palaces">{t.palaces}</option>
+                    <option value="mosques">{t.mosques}</option>
                   </select>
-                  <ChevronDown className="absolute right-3 bottom-3 h-5 w-5 text-[#1e3a5f] pointer-events-none" />
+                  <ChevronDown className="absolute right-3 rtl:right-auto rtl:left-3 bottom-3 h-5 w-5 text-[#1e3a5f] pointer-events-none" />
                 </div>
                 {errors.buildingType && (
                   <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
@@ -295,274 +381,112 @@ export default function ServiceRequestForm() {
                     {errors.buildingType}
                   </p>
                 )}
+                
+                {/* Additional Inputs for Design Consulting */}
+                <div className="grid gap-6 sm:grid-cols-2 mt-4">
+                  {[
+                    { name: "numberOfRooms", ph: t.numRooms },
+                    { name: "numberOfLightingCircuits", ph: t.numLightCircuits },
+                    { name: "numberOfAirConditioningUnits", ph: t.numACUnits },
+                    { name: "numberOfBlinds", ph: t.numBlinds },
+                    { name: "numberOfFloors", ph: t.numFloors },
+                    { name: "numberOfRestrooms", ph: t.numRestrooms },
+                    { name: "numberOfCorridors", ph: t.numCorridors },
+                    { name: "numberOfExteriorDoors", ph: t.numExtDoors },
+                    { name: "numberOfExteriorCameras", ph: t.numExtCams },
+                    { name: "numberOfInteriorCameras", ph: t.numIntCams },
+                    { name: "numberOfAudioSystems", ph: t.numAudio },
+                  ].map((field) => (
+                    <div key={field.name}>
+                      <input
+                        type="number"
+                        name={field.name}
+                        value={(formData as any)[field.name] || ""}
+                        onChange={handleChange}
+                        className={`${inputClass} text-xs sm:text-base text-start`}
+                        placeholder={field.ph}
+                        min="0"
+                      />
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             )}
 
-            {/* Price Quote Fields */}
+            {/* Price Quote Fields - Reusing logic, or similar if needs differ */}
             {formData.serviceCategory === "price-quote" && (
-              <motion.div
+             <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 transition={{ duration: 0.3 }}
-                className="space-y-4"
               >
                 <div className="relative">
-                  <label className="block mb-2 text-sm font-medium text-[#1e3a5f]">Building Type</label>
+                  <label className="block mb-2 text-sm font-medium text-[#1e3a5f] text-start">{t.buildingType}</label>
                   <select
                     name="buildingType"
                     value={formData.buildingType || ""}
                     onChange={handleChange}
                     className={`${selectClass} text-xs sm:text-base`}
                   >
-                    <option value="">Select building type</option>
-                    <option value="administrative-building">Administrative Building</option>
-                    <option value="villa">Villa</option>
-                    <option value="offices">Offices</option>
-                    <option value="apartments">Apartments</option>
+                    <option value="">{t.selectBuildingType}</option>
+                    <option value="administrative-buildings">{t.adminBuildings}</option>
+                    <option value="offices">{t.offices}</option>
+                    <option value="villas-apartments">{t.villasApts}</option>
+                    <option value="residential-complex">{t.residentialComplex}</option>
+                    <option value="hotels">{t.hotels}</option>
+                    <option value="palaces">{t.palaces}</option>
+                    <option value="mosques">{t.mosques}</option>
                   </select>
-                  <ChevronDown className="absolute right-3 bottom-3 h-5 w-5 text-[#1e3a5f] pointer-events-none" />
+                  <ChevronDown className="absolute right-3 rtl:right-auto rtl:left-3 bottom-3 h-5 w-5 text-[#1e3a5f] pointer-events-none" />
                 </div>
-                {errors.buildingType && (
-                  <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
-                    <Info className="w-3 h-3" />
-                    {errors.buildingType}
-                  </p>
-                )}
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfRooms"
-                      value={formData.numberOfRooms || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Rooms"
-                      min="0"
-                    />
-                    {errors.numberOfRooms && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfRooms}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfLightingCircuits"
-                      value={formData.numberOfLightingCircuits || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Lighting Circuits"
-                      min="0"
-                    />
-                    {errors.numberOfLightingCircuits && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfLightingCircuits}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfAirConditioningUnits"
-                      value={formData.numberOfAirConditioningUnits || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of AC Units"
-                      min="0"
-                    />
-                    {errors.numberOfAirConditioningUnits && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfAirConditioningUnits}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfBlinds"
-                      value={formData.numberOfBlinds || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Blinds"
-                      min="0"
-                    />
-                    {errors.numberOfBlinds && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfBlinds}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfFloors"
-                      value={formData.numberOfFloors || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Floors"
-                      min="0"
-                    />
-                    {errors.numberOfFloors && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfFloors}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfRestrooms"
-                      value={formData.numberOfRestrooms || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Restrooms"
-                      min="0"
-                    />
-                    {errors.numberOfRestrooms && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfRestrooms}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfCorridors"
-                      value={formData.numberOfCorridors || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Corridors"
-                      min="0"
-                    />
-                    {errors.numberOfCorridors && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfCorridors}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfExteriorDoors"
-                      value={formData.numberOfExteriorDoors || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Exterior Doors"
-                      min="0"
-                    />
-                    {errors.numberOfExteriorDoors && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfExteriorDoors}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfExteriorCameras"
-                      value={formData.numberOfExteriorCameras || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Exterior Cameras"
-                      min="0"
-                    />
-                    {errors.numberOfExteriorCameras && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfExteriorCameras}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      type="number"
-                      name="numberOfInteriorCameras"
-                      value={formData.numberOfInteriorCameras || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} text-xs sm:text-base`}
-                      placeholder="Number of Interior Cameras"
-                      min="0"
-                    />
-                    {errors.numberOfInteriorCameras && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                        <Info className="w-3 h-3" />
-                        {errors.numberOfInteriorCameras}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <input
-                    type="number"
-                    name="numberOfAudioSystems"
-                    value={formData.numberOfAudioSystems || ""}
-                    onChange={handleChange}
-                    className={`${inputClass} text-xs sm:text-base`}
-                    placeholder="Number of Audio Systems"
-                    min="0"
-                  />
-                  {errors.numberOfAudioSystems && (
-                    <p className="mt-1 flex items-center gap-1 text-xs text-red-500">
-                      <Info className="w-3 h-3" />
-                      {errors.numberOfAudioSystems}
-                    </p>
-                  )}
+                 {/* Additional Inputs for Price Quote - usually similar quantities needed */}
+                <div className="grid gap-6 sm:grid-cols-2 mt-4">
+                  {[
+                    { name: "numberOfRooms", ph: t.numRooms },
+                    { name: "numberOfLightingCircuits", ph: t.numLightCircuits },
+                    { name: "numberOfAirConditioningUnits", ph: t.numACUnits },
+                    { name: "numberOfBlinds", ph: t.numBlinds },
+                    { name: "numberOfFloors", ph: t.numFloors },
+                    { name: "numberOfRestrooms", ph: t.numRestrooms },
+                    { name: "numberOfCorridors", ph: t.numCorridors },
+                    { name: "numberOfExteriorDoors", ph: t.numExtDoors },
+                    { name: "numberOfExteriorCameras", ph: t.numExtCams },
+                    { name: "numberOfInteriorCameras", ph: t.numIntCams },
+                    { name: "numberOfAudioSystems", ph: t.numAudio },
+                  ].map((field) => (
+                    <div key={field.name}>
+                      <input
+                        type="number"
+                        name={field.name}
+                        value={(formData as any)[field.name] || ""}
+                        onChange={handleChange}
+                        className={`${inputClass} text-xs sm:text-base text-start`}
+                        placeholder={field.ph}
+                        min="0"
+                      />
+                    </div>
+                  ))}
                 </div>
               </motion.div>
             )}
 
-            {/* Other Services */}
-            {formData.serviceCategory === "other" && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                transition={{ duration: 0.3 }}
-              >
-                <textarea
-                  name="requirements"
-                  value={formData.requirements || ""}
-                  onChange={handleChange}
-                  rows={5}
-                  className={`${inputClass} text-xs sm:text-base`}
-                  placeholder="Please describe your requirements in detail"
-                />
-                {errors.requirements && (
-                  <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
-                    <Info className="w-3 h-3" />
-                    {errors.requirements}
-                  </p>
-                )}
-              </motion.div>
-            )}
+            {/* Requirements / Other */}
+            <div>
+              <label htmlFor="requirements" className="block mb-2 text-sm font-medium text-[#1e3a5f] text-start">{t.requirements}</label>
+              <textarea
+                name="requirements"
+                rows={4}
+                value={formData.requirements || ""}
+                onChange={handleChange}
+                className={`${inputClass} text-xs sm:text-base text-start`}
+                placeholder={t.requirements}
+              />
+            </div>
 
-            {/* Submit Button */}
             <motion.button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-lg bg-primary px-6 py-4 font-semibold text-white transition-all duration-200 hover:shadow-xl hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer flex items-center justify-center"
+              className="w-full rounded-lg bg-primary px-6 py-4 font-semibold text-white transition-all duration-200 hover:shadow-xl hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer flex items-center justify-center gap-2"
               whileHover={{ scale: isSubmitting ? 1 : 1.02, y: isSubmitting ? 0 : -2 }}
               whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
             >
@@ -581,10 +505,10 @@ export default function ServiceRequestForm() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  <span className="text-sm sm:text-base">Submitting...</span>
+                  <span className="text-sm sm:text-base">{t.submitting}</span>
                 </>
               ) : (
-                <span className="text-sm sm:text-base">Submit Request</span>
+                <span className="text-sm sm:text-base">{t.submit}</span>
               )}
             </motion.button>
           </form>
