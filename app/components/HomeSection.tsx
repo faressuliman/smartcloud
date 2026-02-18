@@ -62,8 +62,9 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
     const handleTouchEnd = useCallback(() => {
         if (!touchStart || !touchEnd) return;
         const distance = touchStart - touchEnd;
-        if (distance > 50) handleHomeCardChange((homeCardIndex + 1) % 6);
-        if (distance < -50) handleHomeCardChange((homeCardIndex - 1 + 6) % 6);
+        const isRTL = language === 'ar';
+        if (distance > 50) handleHomeCardChange((homeCardIndex + (isRTL ? -1 : 1) + 6) % 6);
+        if (distance < -50) handleHomeCardChange((homeCardIndex + (isRTL ? 1 : -1) + 6) % 6);
     }, [touchStart, touchEnd, homeCardIndex, handleHomeCardChange]);
 
     return (
@@ -76,7 +77,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                 transition={{ duration: 0.6, ease: "easeOut" }}
             >
                 <div className="flex items-center gap-4 px-2 sm:px-0">
-                    <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+                    <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest rtl:tracking-normal">
                         {sections.welcomeTitle}
                     </h2>
                     <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1 rtl:rotate-90" />
@@ -111,7 +112,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                     transition={{ duration: 0.6, ease: "easeOut" }}
                     className="pb-4 border-b border-slate-200/60 px-4 md:px-4 lg:px-0 flex items-center gap-4"
                 >
-                    <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+                    <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest rtl:tracking-normal">
                         {sections.whatWeDoTitle}
                     </h2>
                     {language === 'en' ? (
@@ -148,7 +149,8 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                     <div className="hidden md:block overflow-hidden py-4 -my-4">
                         <motion.div
                             className="flex"
-                            animate={{ x: featureSlideIndex === 0 ? "0%" : (language === 'ar' ? "50%" : "-50%") }}
+                            dir="ltr"
+                            animate={{ x: featureSlideIndex === 0 ? "0%" : "-50%" }}
                             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                             style={{ width: "200%" }}
                         >
@@ -184,8 +186,9 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                         onTouchEnd={handleTouchEnd}
                     >
                         <div
+                            dir="ltr"
                             className="flex transition-transform duration-500 ease-in-out"
-                            style={{ transform: `translateX(${language === 'ar' ? '' : '-'}${homeCardIndex * 100}%)` }}
+                            style={{ transform: `translateX(-${homeCardIndex * 100}%)` }}
                         >
                             {homeFeatures.map((item, index) => (
                                 <HomeFeatureCard

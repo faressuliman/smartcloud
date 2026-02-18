@@ -26,7 +26,7 @@ export default function LocationSection() {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <div className="flex items-center gap-4 px-2 sm:px-0">
-              <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+              <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest rtl:tracking-normal">
                 {location.title}
               </h2>
               {language === 'en' ? (

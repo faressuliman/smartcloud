@@ -17,13 +17,24 @@ const designConsultingSchema = baseServiceRequestSchema.extend({
     ["administrative-buildings", "offices", "villas-apartments", "residential-complex", "hotels", "palaces", "mosques"],
     { message: "Please select a building type" }
   ),
+  numberOfRooms: z.string().min(1, "Number of rooms is required"),
+  numberOfLightingCircuits: z.string().min(1, "Number of lighting circuits is required"),
+  numberOfAirConditioningUnits: z.string().min(1, "Number of air conditioning units is required"),
+  numberOfBlinds: z.string().min(1, "Number of blinds is required"),
+  numberOfFloors: z.string().min(1, "Number of floors is required"),
+  numberOfRestrooms: z.string().min(1, "Number of restrooms is required"),
+  numberOfCorridors: z.string().min(1, "Number of corridors is required"),
+  numberOfExteriorDoors: z.string().min(1, "Number of exterior doors is required"),
+  numberOfExteriorCameras: z.string().min(1, "Number of exterior cameras is required"),
+  numberOfInteriorCameras: z.string().min(1, "Number of interior cameras is required"),
+  numberOfAudioSystems: z.string().min(1, "Number of audio systems is required"),
 });
 
 // Schema for option 2: Price Quote
 const priceQuoteSchema = baseServiceRequestSchema.extend({
   serviceCategory: z.literal("price-quote"),
   buildingType: z.enum(
-    ["administrative-building", "villa", "offices", "apartments"],
+    ["administrative-buildings", "offices", "villas-apartments", "residential-complex", "hotels", "palaces", "mosques"],
     { message: "Please select a building type" }
   ),
   numberOfRooms: z.string().min(1, "Number of rooms is required"),

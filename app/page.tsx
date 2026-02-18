@@ -24,7 +24,7 @@ export default function Home() {
       <section className="hidden bg-slate-900 py-12 px-4 border-t border-white/10">
         <div className="max-w-xl mx-auto space-y-6">
           <div className="text-center space-y-3 px-4">
-            <h3 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wide">
+            <h3 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wide rtl:tracking-normal">
               Our Regional Presence
             </h3>
             <p className="text-sm sm:text-base text-white/70 leading-relaxed">

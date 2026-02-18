@@ -17,7 +17,7 @@ const SectionHeader = memo(function SectionHeader({ title, description }: Sectio
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <div className="flex items-center gap-4 px-2 sm:px-0">
-        <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+        <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest rtl:tracking-normal">
           {title}
         </h2>
         <ArrowDownRight className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />

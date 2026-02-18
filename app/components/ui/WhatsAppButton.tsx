@@ -42,7 +42,7 @@ const WhatsAppButton = memo(function WhatsAppButton() {
       // I'll support RTL flip: `left-4 rtl:left-auto rtl:right-4`.
       className="fixed z-50 flex items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-all hover:shadow-xl hover:bg-[#128C7E] cursor-pointer
         h-12 w-12 sm:h-14 sm:w-14
-        bottom-20 sm:bottom-22
+        bottom-20 sm:bottom-22 lg:bottom-6
         left-4 rtl:left-auto rtl:right-4"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}

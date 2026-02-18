@@ -206,7 +206,7 @@ export default function HeroSection() {
 
         {/* Mobile Section - Flag Buttons with Dotted Line */}
         <div className="w-full xl:hidden flex">
-          <div className="flex items-center gap-3 sm:gap-4 flex-row-reverse rtl:flex-row">
+          <div className="flex items-center gap-3 sm:gap-4">
             
             {/* Saudi Arabia Button */}
             <button

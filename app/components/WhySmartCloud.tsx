@@ -34,7 +34,7 @@ export default function WhySmartCloud() {
             className="w-full px-4 lg:px-0 flex flex-col items-center pb-6 md:pb-10 lg:pb-16"
         >
             <div className="flex items-center gap-4 mb-4 lg:mb-8 px-2 sm:px-0">
-                <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+                <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest rtl:tracking-normal">
                     {whySmartCloudContent.title}
                 </h2>
             </div>
@@ -82,7 +82,7 @@ export default function WhySmartCloud() {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.5, delay: 0.3 }}
-                                    className="text-lg md:text-xl font-medium text-white/90 uppercase tracking-wide"
+                                    className="text-lg md:text-xl font-medium text-white/90 uppercase tracking-wide rtl:tracking-normal"
                                 >
                                     {currentStat.title}
                                 </motion.p>
@@ -142,7 +142,7 @@ export default function WhySmartCloud() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.5 }}
-                            className="text-lg md:text-xl font-bold text-slate-700 uppercase tracking-wide"
+                            className="text-lg md:text-xl font-bold text-slate-700 uppercase tracking-wide rtl:tracking-normal"
                         >
                             {whySmartCloudContent.experience.title}
                         </motion.h4>

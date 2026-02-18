@@ -100,7 +100,7 @@ export default function PartnersSlider() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex items-center gap-4"
           >
-            <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest rtl:tracking-normal">
               {partners.title}
             </h2>
             {language === 'en' ? (

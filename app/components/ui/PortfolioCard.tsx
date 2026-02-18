@@ -24,6 +24,7 @@ const PortfolioCard = memo(function PortfolioCard({ portfolio, currentIndex, onP
   const isRTL = language === 'ar';
   const handleLeftClick = isRTL ? onNext : onPrev;
   const handleRightClick = isRTL ? onPrev : onNext;
+  const labels = language === 'ar' ? { overview: 'نظرة عامة', keyHighlights: 'أبرز النقاط' } : { overview: 'Overview', keyHighlights: 'Key Highlights' };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -103,8 +104,8 @@ const PortfolioCard = memo(function PortfolioCard({ portfolio, currentIndex, onP
               transition={{ duration: 0.6, delay: 0.5 }}
               className="mb-6"
             >
-              <h4 className="text-white/60 text-xs uppercase tracking-wider mb-4 font-semibold text-center">
-                Key Highlights
+              <h4 className="text-white/60 text-xs uppercase tracking-wider rtl:tracking-normal mb-4 font-semibold text-center">
+                {labels.keyHighlights}
               </h4>
               <div className="space-y-3">
                 {portfolio.highlights.map((highlight, idx) => (
@@ -172,8 +173,8 @@ const PortfolioCard = memo(function PortfolioCard({ portfolio, currentIndex, onP
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mb-6"
           >
-            <h4 className="text-white/40 text-xs uppercase tracking-wider mb-3 font-semibold">
-              Overview
+            <h4 className="text-white/40 text-xs uppercase tracking-wider rtl:tracking-normal mb-3 font-semibold">
+              {labels.overview}
             </h4>
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
@@ -192,8 +193,8 @@ const PortfolioCard = memo(function PortfolioCard({ portfolio, currentIndex, onP
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mb-8 flex-1"
           >
-            <h4 className="text-white/40 text-xs uppercase tracking-wider mb-4 font-semibold">
-              Key Highlights
+            <h4 className="text-white/40 text-xs uppercase tracking-wider rtl:tracking-normal mb-4 font-semibold">
+              {labels.keyHighlights}
             </h4>
             <div className="space-y-3">
               {portfolio.highlights.map((highlight, idx) => (

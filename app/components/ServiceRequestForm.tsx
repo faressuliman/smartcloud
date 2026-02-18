@@ -77,6 +77,27 @@ export default function ServiceRequestForm() {
     submitting: "Submitting...",
     errors: {
       submitFail: "Failed to submit. Please try again."
+    },
+    validation: {
+      fullNameRequired: "Full Name is required",
+      emailRequired: "Email is required",
+      emailInvalid: "Invalid email address",
+      phoneRequired: "Phone is required",
+      phoneMin: "Phone number must be at least 10 digits",
+      serviceCategoryRequired: "Please select a service category",
+      buildingTypeRequired: "Please select a building type",
+      numberOfRoomsRequired: "Number of rooms is required",
+      numberOfLightingCircuitsRequired: "Number of lighting circuits is required",
+      numberOfAirConditioningUnitsRequired: "Number of air conditioning units is required",
+      numberOfBlindsRequired: "Number of blinds is required",
+      numberOfFloorsRequired: "Number of floors is required",
+      numberOfRestroomsRequired: "Number of restrooms is required",
+      numberOfCorridorsRequired: "Number of corridors is required",
+      numberOfExteriorDoorsRequired: "Number of exterior doors is required",
+      numberOfExteriorCamerasRequired: "Number of exterior cameras is required",
+      numberOfInteriorCamerasRequired: "Number of interior cameras is required",
+      numberOfAudioSystemsRequired: "Number of audio systems is required",
+      requirementsMin: "Please provide detailed requirements (minimum 10 characters)",
     }
   } : {
     header: "طلب خدمة",
@@ -116,6 +137,27 @@ export default function ServiceRequestForm() {
     submitting: "جاري الإرسال...",
     errors: {
       submitFail: "فشل الإرسال. يرجى المحاولة مرة أخرى."
+    },
+    validation: {
+      fullNameRequired: "الاسم الكامل مطلوب",
+      emailRequired: "البريد الإلكتروني مطلوب",
+      emailInvalid: "عنوان بريد إلكتروني غير صالح",
+      phoneRequired: "رقم الهاتف مطلوب",
+      phoneMin: "رقم الهاتف يجب أن يكون 10 أرقام على الأقل",
+      serviceCategoryRequired: "يرجى اختيار فئة الخدمة",
+      buildingTypeRequired: "يرجى اختيار نوع المبنى",
+      numberOfRoomsRequired: "عدد الغرف مطلوب",
+      numberOfLightingCircuitsRequired: "عدد دوائر الإضاءة مطلوب",
+      numberOfAirConditioningUnitsRequired: "عدد وحدات التكييف مطلوب",
+      numberOfBlindsRequired: "عدد الستائر مطلوب",
+      numberOfFloorsRequired: "عدد الطوابق مطلوب",
+      numberOfRestroomsRequired: "عدد دورات المياه مطلوب",
+      numberOfCorridorsRequired: "عدد الممرات مطلوب",
+      numberOfExteriorDoorsRequired: "عدد الأبواب الخارجية مطلوب",
+      numberOfExteriorCamerasRequired: "عدد الكاميرات الخارجية مطلوب",
+      numberOfInteriorCamerasRequired: "عدد الكاميرات الداخلية مطلوب",
+      numberOfAudioSystemsRequired: "عدد الأنظمة الصوتية مطلوب",
+      requirementsMin: "يرجى تقديم متطلبات تفصيلية (10 أحرف على الأقل)",
     }
   };
 
@@ -185,9 +227,37 @@ export default function ServiceRequestForm() {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Partial<Record<string, string>> = {};
+        // Map from Zod field paths to translation keys
+        const fieldValidationMap: Record<string, string> = {
+          fullName: t.validation.fullNameRequired,
+          email: t.validation.emailRequired,
+          phone: t.validation.phoneRequired,
+          serviceCategory: t.validation.serviceCategoryRequired,
+          buildingType: t.validation.buildingTypeRequired,
+          numberOfRooms: t.validation.numberOfRoomsRequired,
+          numberOfLightingCircuits: t.validation.numberOfLightingCircuitsRequired,
+          numberOfAirConditioningUnits: t.validation.numberOfAirConditioningUnitsRequired,
+          numberOfBlinds: t.validation.numberOfBlindsRequired,
+          numberOfFloors: t.validation.numberOfFloorsRequired,
+          numberOfRestrooms: t.validation.numberOfRestroomsRequired,
+          numberOfCorridors: t.validation.numberOfCorridorsRequired,
+          numberOfExteriorDoors: t.validation.numberOfExteriorDoorsRequired,
+          numberOfExteriorCameras: t.validation.numberOfExteriorCamerasRequired,
+          numberOfInteriorCameras: t.validation.numberOfInteriorCamerasRequired,
+          numberOfAudioSystems: t.validation.numberOfAudioSystemsRequired,
+          requirements: t.validation.requirementsMin,
+        };
         error.issues.forEach((err: z.ZodIssue) => {
           if (err.path[0]) {
-            fieldErrors[err.path[0] as string] = err.message;
+            const field = err.path[0] as string;
+            // Use translated message, with special handling for email/phone format errors
+            if (field === 'email' && err.code === 'invalid_format') {
+              fieldErrors[field] = t.validation.emailInvalid;
+            } else if (field === 'phone' && err.code === 'too_small') {
+              fieldErrors[field] = t.validation.phoneMin;
+            } else {
+              fieldErrors[field] = fieldValidationMap[field] || err.message;
+            }
           }
         });
         setErrors(fieldErrors);
@@ -222,7 +292,7 @@ export default function ServiceRequestForm() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest"
+            className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest rtl:tracking-normal"
           >
             {t.header}
           </motion.h2>
@@ -407,6 +477,12 @@ export default function ServiceRequestForm() {
                         placeholder={field.ph}
                         min="0"
                       />
+                      {errors[field.name] && (
+                        <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
+                          <Info className="w-3 h-3" />
+                          {errors[field.name]}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -439,6 +515,12 @@ export default function ServiceRequestForm() {
                   </select>
                   <ChevronDown className="absolute right-3 rtl:right-auto rtl:left-3 bottom-3 h-5 w-5 text-[#1e3a5f] pointer-events-none" />
                 </div>
+                {errors.buildingType && (
+                  <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
+                    <Info className="w-3 h-3" />
+                    {errors.buildingType}
+                  </p>
+                )}
                  {/* Additional Inputs for Price Quote - usually similar quantities needed */}
                 <div className="grid gap-6 sm:grid-cols-2 mt-4">
                   {[
@@ -464,6 +546,12 @@ export default function ServiceRequestForm() {
                         placeholder={field.ph}
                         min="0"
                       />
+                      {errors[field.name] && (
+                        <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
+                          <Info className="w-3 h-3" />
+                          {errors[field.name]}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -481,6 +569,12 @@ export default function ServiceRequestForm() {
                 className={`${inputClass} text-xs sm:text-base text-start`}
                 placeholder={t.requirements}
               />
+              {errors.requirements && (
+                <p className="mt-1 flex items-center gap-1 text-xs sm:text-base text-red-500">
+                  <Info className="w-3 h-3" />
+                  {errors.requirements}
+                </p>
+              )}
             </div>
 
             <motion.button

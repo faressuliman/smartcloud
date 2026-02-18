@@ -35,6 +35,13 @@ export default function CareersForm() {
     errors: {
       cvRequired: "CV/Resume is required",
       submitFail: "Failed to submit. Please try again."
+    },
+    validation: {
+      fullNameRequired: "Full Name must be at least 4 characters",
+      emailRequired: "Email is required",
+      emailInvalid: "Invalid email address",
+      phoneRequired: "Phone is required",
+      phoneMin: "Phone number must be at least 10 digits",
     }
   } : {
     header: "انضم إلى فريقنا",
@@ -52,6 +59,13 @@ export default function CareersForm() {
     errors: {
       cvRequired: "السيرة الذاتية مطلوبة",
       submitFail: "فشل الإرسال. يرجى المحاولة مرة أخرى."
+    },
+    validation: {
+      fullNameRequired: "الاسم الكامل يجب أن يكون 4 أحرف على الأقل",
+      emailRequired: "البريد الإلكتروني مطلوب",
+      emailInvalid: "عنوان بريد إلكتروني غير صالح",
+      phoneRequired: "رقم الهاتف مطلوب",
+      phoneMin: "رقم الهاتف يجب أن يكون 10 أرقام على الأقل",
     }
   };
 
@@ -136,9 +150,21 @@ export default function CareersForm() {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Partial<Record<keyof CareersFormData, string>> = {};
+        const fieldValidationMap: Record<string, string> = {
+          fullName: t.validation.fullNameRequired,
+          email: t.validation.emailRequired,
+          phone: t.validation.phoneRequired,
+        };
         error.issues.forEach((err: z.ZodIssue) => {
           if (err.path[0]) {
-            fieldErrors[err.path[0] as keyof CareersFormData] = err.message;
+            const field = err.path[0] as keyof CareersFormData;
+            if (field === 'email' && err.code === 'invalid_format') {
+              fieldErrors[field] = t.validation.emailInvalid;
+            } else if (field === 'phone' && err.code === 'too_small') {
+              fieldErrors[field] = t.validation.phoneMin;
+            } else {
+              fieldErrors[field] = fieldValidationMap[field as string] || err.message;
+            }
           }
         });
         // Also check CV if it's missing
@@ -174,7 +200,7 @@ export default function CareersForm() {
     >
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-4">
-          <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest">
+          <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 uppercase tracking-widest rtl:tracking-normal">
             {t.header}
           </h2>
           {language === 'en' ? (
