@@ -112,14 +112,14 @@ export default function PartnersSlider() {
 
           <div className="flex items-center gap-3" dir="ltr">
             <button
-              onClick={handlePrevSlide}
+              onClick={language === 'ar' ? handleNextSlide : handlePrevSlide}
               className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer"
               aria-label="Previous slide"
             >
               <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 text-slate-700" />
             </button>
             <button
-              onClick={handleNextSlide}
+              onClick={language === 'ar' ? handlePrevSlide : handleNextSlide}
               className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer"
               aria-label="Next slide"
             >
