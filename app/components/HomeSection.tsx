@@ -63,9 +63,15 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
         if (!touchStart || !touchEnd) return;
         const distance = touchStart - touchEnd;
         const isRTL = language === 'ar';
-        if (distance > 50) handleHomeCardChange((homeCardIndex + (isRTL ? -1 : 1) + 6) % 6);
-        if (distance < -50) handleHomeCardChange((homeCardIndex + (isRTL ? 1 : -1) + 6) % 6);
-    }, [touchStart, touchEnd, homeCardIndex, handleHomeCardChange]);
+        // For RTL, swap next and prev directions
+        if (isRTL) {
+            if (distance > -50) handleHomeCardChange((homeCardIndex - 1 + 6) % 6);
+            if (distance < 50) handleHomeCardChange((homeCardIndex + 1 + 6) % 6);
+        } else {
+            if (distance > 50) handleHomeCardChange((homeCardIndex + 1 + 6) % 6);
+            if (distance < -50) handleHomeCardChange((homeCardIndex - 1 + 6) % 6);
+        }
+    }, [touchStart, touchEnd, homeCardIndex, handleHomeCardChange, language]);
 
     return (
         <div className="mx-auto max-w-6xl w-full">
@@ -150,7 +156,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                         <motion.div
                             className="flex"
                             dir="ltr"
-                            animate={{ x: featureSlideIndex === 0 ? "0%" : "-50%" }}
+                            animate={{ x: featureSlideIndex === 0 ? "0%" : (language === 'ar' ? "50%" : "-50%") }}
                             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                             style={{ width: "200%" }}
                         >
@@ -188,9 +194,12 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                         <div
                             dir="ltr"
                             className="flex transition-transform duration-500 ease-in-out"
-                            style={{ transform: `translateX(-${homeCardIndex * 100}%)` }}
+                            style={{ transform: language === 'ar'
+                                ? `translateX(-${(homeFeatures.length - 1 - homeCardIndex) * 100}%)`
+                                : `translateX(-${homeCardIndex * 100}%)`
+                            }}
                         >
-                            {homeFeatures.map((item, index) => (
+                            {(language === 'ar' ? [...homeFeatures].reverse() : homeFeatures).map((item, index) => (
                                 <HomeFeatureCard
                                     key={index}
                                     icon={item.icon}

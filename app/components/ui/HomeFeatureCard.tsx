@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
 import { memo } from "react";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface HomeFeatureCardProps {
   icon: LucideIcon;
@@ -25,6 +26,7 @@ const HomeFeatureCard = memo(function HomeFeatureCard({
   totalCards = 3,
   onDotClick,
 }: HomeFeatureCardProps) {
+  const { language } = useLanguage();
   const cardContent = (
     <div className={`relative z-10 bg-white border-2 border-secondary/30 rounded-xl shadow-lg transition-all duration-300 hover:shadow-secondary-dark ${isMobile
       ? "p-6 pb-8 h-82 flex flex-col items-center text-center"
@@ -60,7 +62,7 @@ const HomeFeatureCard = memo(function HomeFeatureCard({
       </motion.p>
       {/* Dots Indicator - Only for mobile */}
       {isMobile && currentIndex !== undefined && totalCards && onDotClick && (
-        <div className="flex justify-center gap-2 mt-auto pt-2">
+        <div className={`flex justify-center gap-2 mt-auto pt-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
           {Array.from({ length: totalCards }).map((_, index) => (
             <button
               key={index}
