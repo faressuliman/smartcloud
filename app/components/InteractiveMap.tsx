@@ -234,11 +234,11 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
                         <motion.p
                             key={hoveredMarker}
                             initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            animate={{ opacity: 1, y: -2 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="text-[10px] sm:text-xs font-bold tracking-[0.15em] uppercase text-white drop-shadow-md"
+                            className={`text-[10px] sm:text-xs font-bold uppercase text-white drop-shadow-md ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.15em]'}`}
                         >
-                            {COUNTRY_MARKERS.find(m => m.id === hoveredMarker)?.label} {language === 'en' ? 'Branch - Click to Explore' : 'الفرع - انقر للاستكشاف'}
+                            {language === 'ar' ? `فرع ${COUNTRY_MARKERS.find(m => m.id === hoveredMarker)?.label}` : COUNTRY_MARKERS.find(m => m.id === hoveredMarker)?.label} {language === 'en' ? '- Click to Explore' : '- انقر للاستكشاف'}
                         </motion.p>
                     ) : (
                         <motion.p
