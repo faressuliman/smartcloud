@@ -28,7 +28,7 @@ const HomeFeatureCard = memo(function HomeFeatureCard({
 }: HomeFeatureCardProps) {
   const { language } = useLanguage();
   const cardContent = (
-    <div className={`relative z-10 bg-white border-2 border-secondary/30 rounded-xl shadow-lg transition-all duration-300 hover:shadow-secondary-dark ${isMobile
+    <div className={`relative z-10 bg-white border-2 border-secondary/30 rounded-xl shadow-lg transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 ${isMobile
       ? "p-6 pb-8 h-82 flex flex-col items-center text-center"
       : "p-4 sm:p-6 md:p-4 lg:p-8 h-full flex flex-col items-center text-center"
       }`}>

@@ -93,7 +93,7 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
                     <defs>
                         {COUNTRY_MARKERS.map((marker) => (
                             <clipPath key={`clip-${marker.id}`} id={`clip-${marker.id}`}>
-                                <circle cx={marker.x} cy={marker.y} r={6.5} />
+                                <circle cx={marker.x} cy={marker.y} r={6.0} />
                             </clipPath>
                         ))}
                         {/* Ping animation gradients */}
@@ -138,10 +138,10 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
                                         <motion.circle
                                             cx={marker.x}
                                             cy={marker.y}
-                                            r={6.5}
+                                            r={6.0}
                                             fill={`url(#ping-${marker.id})`}
-                                            initial={{ r: 6.5, opacity: 0.8 }}
-                                            animate={{ r: [6.5, 20, 20], opacity: [0.8, 0, 0] }}
+                                            initial={{ r: 6.0, opacity: 0.8 }}
+                                            animate={{ r: [6.0, 20, 20], opacity: [0.8, 0, 0] }}
                                             transition={{
                                                 duration: 2,
                                                 repeat: Infinity,
@@ -151,10 +151,10 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
                                         <motion.circle
                                             cx={marker.x}
                                             cy={marker.y}
-                                            r={6.5}
+                                            r={6.0}
                                             fill={`url(#ping-${marker.id})`}
-                                            initial={{ r: 6.5, opacity: 0.8 }}
-                                            animate={{ r: [6.5, 20, 20], opacity: [0.8, 0, 0] }}
+                                            initial={{ r: 6.0, opacity: 0.8 }}
+                                            animate={{ r: [6.0, 20, 20], opacity: [0.8, 0, 0] }}
                                             transition={{
                                                 duration: 2,
                                                 delay: 1,
@@ -170,7 +170,7 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
                                     <circle
                                         cx={marker.x}
                                         cy={marker.y}
-                                        r={9}
+                                        r={8.5}
                                         fill={marker.color}
                                         opacity={0.15}
                                     />
@@ -189,7 +189,7 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
                                     <circle
                                         cx={marker.x}
                                         cy={marker.y}
-                                        r={6.8}
+                                        r={6.3}
                                         fill="white"
                                     />
 
@@ -197,10 +197,10 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
                                     <image
                                         xlinkHref={marker.flag}
                                         href={marker.flag}
-                                        x={marker.x - 7.5}
-                                        y={marker.y - 7.5}
-                                        width={15}
-                                        height={15}
+                                        x={marker.x - 7.0}
+                                        y={marker.y - 7.0}
+                                        width={14}
+                                        height={14}
                                         clipPath={`url(#clip-${marker.id})`}
                                         preserveAspectRatio="xMidYMid slice"
                                     />

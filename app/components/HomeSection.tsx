@@ -152,15 +152,14 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                         </button>
                     </div>
 
-                    <div className="hidden md:block overflow-hidden py-4 -my-4">
+                    <div dir="ltr" className="hidden md:block overflow-hidden py-4 -my-4">
                         <motion.div
                             className="flex"
-                            dir="ltr"
-                            animate={{ x: featureSlideIndex === 0 ? "0%" : (language === 'ar' ? "50%" : "-50%") }}
+                            animate={{ x: featureSlideIndex === 0 ? "0%" : "-50%" }}
                             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                             style={{ width: "200%" }}
                         >
-                            <div className="grid grid-cols-3 gap-4 lg:gap-8 w-1/2">
+                            <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="grid grid-cols-3 gap-4 lg:gap-8 w-1/2">
                                 {homeFeatures.slice(0, 3).map((item, index) => (
                                     <HomeFeatureCard
                                         key={index}
@@ -171,7 +170,7 @@ export default function HomeSection({ isNavigated }: HomeSectionProps) {
                                     />
                                 ))}
                             </div>
-                            <div className="grid grid-cols-3 gap-4 lg:gap-8 w-1/2">
+                            <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="grid grid-cols-3 gap-4 lg:gap-8 w-1/2">
                                 {homeFeatures.slice(3, 6).map((item, index) => (
                                     <HomeFeatureCard
                                         key={index + 3}

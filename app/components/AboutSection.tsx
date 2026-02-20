@@ -61,7 +61,7 @@ export default function AboutSection() {
                     transition={{ duration: 0.6 }}
                     className="relative"
                 >
-                    <div className="absolute rtl:right-4 rtl:sm:right-6 left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-slate-200" />
+                    <div className="absolute rtl:right-4 rtl:sm:right-6 left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-slate-300" />
 
                     <div className="space-y-8">
                         <div className="relative pl-12 sm:pl-16 rtl:pr-12 rtl:sm:pr-16 z-10">
