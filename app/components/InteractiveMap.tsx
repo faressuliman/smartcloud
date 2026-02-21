@@ -58,7 +58,7 @@ export default function InteractiveMap({ className }: InteractiveMapProps) {
 
     const handleMarkerClick = (id: string) => {
         if (id === "uae") {
-            window.open("https://turbotechnikmt.com", "_blank", "noopener,noreferrer");
+            window.open("https://www.turbotechnikmt.com/#partners", "_blank", "noopener,noreferrer");
             return;
         }
 

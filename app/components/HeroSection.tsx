@@ -15,7 +15,7 @@ export default function HeroSection() {
   const heroContent = content[language].hero;
 
   const handleUaeClick = () => {
-    window.open("https://turbotechnikmt.com", "_blank", "noopener,noreferrer");
+    window.open("https://www.turbotechnikmt.com/#partners", "_blank", "noopener,noreferrer");
   };
 
   const handleSaudiClick = () => {
