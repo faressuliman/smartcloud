@@ -12,7 +12,10 @@ export default function PartnersSlider() {
   const { partners } = content[language];
   const [currentSlide, setCurrentSlide] = useState(0);
   const [windowWidth, setWindowWidth] = useState(1024);
+  const [isInView, setIsInView] = useState(false);
+  const [hasBeenSeen, setHasBeenSeen] = useState(false);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -56,11 +59,6 @@ export default function PartnersSlider() {
     slides.push(partnerLogos.slice(i, i + logosPerSlide));
   };
 
-  useEffect(() => {
-    startAutoPlay();
-    return () => stopAutoPlay();
-  }, []);
-
   const startAutoPlay = () => {
     if (autoPlayRef.current) clearInterval(autoPlayRef.current);
     autoPlayRef.current = setInterval(() => {
@@ -72,19 +70,55 @@ export default function PartnersSlider() {
     if (autoPlayRef.current) clearInterval(autoPlayRef.current);
   };
 
+  // Intersection Observer to detect when slider is in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setHasBeenSeen(true);
+        }
+      },
+      {
+        threshold: 0.1, // Trigger when just 10% of the component is visible
+        rootMargin: '0px'
+      }
+    );
+
+    if (sliderRef.current) {
+      observer.observe(sliderRef.current);
+    }
+
+    return () => {
+      if (sliderRef.current) {
+        observer.unobserve(sliderRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (hasBeenSeen) {
+      startAutoPlay();
+    } else {
+      stopAutoPlay();
+    }
+    return () => stopAutoPlay();
+  }, [hasBeenSeen]);
+
   const handlePrevSlide = () => {
     stopAutoPlay();
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    startAutoPlay();
+    if (hasBeenSeen) startAutoPlay();
   };
 
   const handleNextSlide = () => {
     stopAutoPlay();
     setCurrentSlide((prev) => (prev + 1) % slides.length);
+    if (hasBeenSeen) startAutoPlay();
   };
 
   return (
-    <div id="partners" className="w-full bg-white pt-6 pb-9 lg:pb-12 shadow-4xl">
+    <div ref={sliderRef} id="partners" className="w-full bg-white pt-6 pb-9 lg:pb-12 shadow-4xl">
       <motion.div
         className="w-full px-4 sm:px-8 lg:px-12 mb-6"
         initial={{ opacity: 0, y: 30 }}
@@ -136,23 +170,15 @@ export default function PartnersSlider() {
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
         onMouseEnter={stopAutoPlay}
-        onMouseLeave={startAutoPlay}
+        onMouseLeave={hasBeenSeen ? startAutoPlay : undefined}
       >
-        <motion.div
-          key={currentSlide}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.5 }}
-          className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-4 lg:gap-6"
-        >
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-4 lg:gap-6">
           {slides[currentSlide]?.map((partner, index) => (
             <motion.div
-              key={partner.id}
+              key={`${currentSlide}-${partner.id}`}
               initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
               className="relative w-full h-24 lg:h-32 rounded-xl overflow-hidden bg-white transition-all border border-gray-100"
             >
               <Image
@@ -165,7 +191,7 @@ export default function PartnersSlider() {
               />
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </motion.div>
     </div>
   );

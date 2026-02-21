@@ -96,6 +96,14 @@ export default function ContentSection() {
   return (
     <>
       <section ref={sectionRef} className="relative flex flex-col justify-start bg-slate-200 pt-0 pb-8 md:pt-0 md:pb-8 lg:py-8 h-auto overflow-x-hidden" style={{ zIndex: 1 }}>
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-repeat-y opacity-15 z-0"
+          style={{
+            backgroundImage: "url(/common/cloud.jpg)",
+          }}
+        />
+
         <div className="hidden lg:block absolute right-4 z-50 lg:right-6" style={{ top: "75vh", transform: "translateY(-50%)" }}>
           <SectionIndicator sections={navItems} activeSection={activeSection} onSectionChange={navigateToSection} />
         </div>

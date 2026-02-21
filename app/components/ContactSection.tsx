@@ -33,14 +33,6 @@ export default function ContactSection() {
 
   return (
     <section id="contact-section" className="relative h-auto bg-linear-to-br from-slate-50 via-white to-slate-100 pb-12 sm:pb-16 md:pb-20 lg:pb-24">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-repeat-y opacity-15 z-0"
-        style={{
-          backgroundImage: "url(/common/cloud.jpg)",
-        }}
-      />
-
       <div className="relative z-10 mx-auto max-w-6xl sm:px-6 lg:px-8">
         {/* Tab Selector */}
         <div className="mb-8 sm:mb-10 md:mb-12 px-0">
