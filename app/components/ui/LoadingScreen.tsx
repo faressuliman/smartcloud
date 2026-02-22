@@ -3,9 +3,11 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 export default function LoadingScreen() {
   const [isLoading, setIsLoading] = useState(true);
+  const { language } = useLanguage();
 
   useEffect(() => {
     // Preload logo image immediately
@@ -159,7 +161,35 @@ export default function LoadingScreen() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
+          <motion.p
+            className="text-secondary text-lg font-semibold"
+            dir={language === "ar" ? "rtl" : "ltr"}
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            {language === "ar" ? "السحابة الذكية" : "Smart Cloud"}
+          </motion.p>
         </motion.div>
+
+        {/* Loading Dots */}
+        <div className="mt-8 flex justify-center gap-2">
+          {[0, 1, 2].map((index) => (
+            <motion.div
+              key={index}
+              className="h-2 w-2 rounded-full bg-secondary"
+              animate={{
+                y: [0, -10, 0],
+                opacity: [0.5, 1, 0.5],
+              }}
+              transition={{
+                duration: 0.8,
+                repeat: Infinity,
+                delay: index * 0.2,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
       </div>
     </motion.div>
   );

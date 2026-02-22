@@ -144,9 +144,9 @@ const PortfolioCard = memo(function PortfolioCard({ portfolio, currentIndex, onP
 
       {/* Desktop Layout - Right Side Content */}
       <div className="hidden lg:block lg:w-1/2 relative bg-slate-800/95 h-full">
-        <div className="px-16 py-8 sm:px-20 lg:pl-14 lg:pr-24 lg:py-12 h-full flex flex-col">
+        <div className="px-16 py-8 sm:px-20 lg:pl-14 lg:pr-24 lg:pt-8lg:pb-12 h-full flex flex-col">
           {/* Icon and Title */}
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-8">
             <div
               className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-secondary/20"
             >
